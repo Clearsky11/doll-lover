@@ -1370,7 +1370,7 @@
     </div>
   </div>
 </div>
-<audio id="playerAudio" loop preload="auto" playsinline autoplay src="Njz.mp3"></audio>
+<audio id="playerAudio" loop preload="auto" playsinline autoplay src="Njz_small.mp3"></audio>
 
 <header class="topbar">
   <span class="topbar-brand text-silver">OPERATOR<span class="text-silver-dim">_</span>FILE</span>
@@ -2049,10 +2049,20 @@
     function tryPlay() {
       if (!audio.getAttribute("src")) return;
       var pr = audio.play();
-      if (pr && pr.catch) pr.catch(function () {});
+      if (pr && pr.catch) pr.catch(function (e) {
+        console.warn("音频播放失败:", e);
+      });
     }
 
     playBtn.addEventListener("click", function () {
+      if (!audio.getAttribute("src")) {
+        alert("音频文件不存在，请检查 Njz_small.mp3 是否已上传");
+        return;
+      }
+      if (audio.error) {
+        alert("音频加载失败，请确认 Njz_small.mp3 已上传到 GitHub");
+        return;
+      }
       if (audio.paused) tryPlay();
       else audio.pause();
     });
@@ -2060,11 +2070,10 @@
     audio.addEventListener("play", function () { setPlayingUI(true); });
     audio.addEventListener("pause", function () { setPlayingUI(false); });
     audio.addEventListener("ended", function () { setPlayingUI(false); });
-
-    tryPlay();
-    document.body.addEventListener("click", function unlockOnce() {
-      if (audio.paused) tryPlay();
-    }, { once: true });
+    audio.addEventListener("error", function () {
+      setPlayingUI(false);
+      console.error("音频加载失败，请确认 Njz_small.mp3 已上传到 GitHub");
+    });
   })();
 
   /* 首屏 TV 噪点（极弱、低帧率） */
