@@ -704,7 +704,7 @@
     .section-head h2 .h2-silver { color: var(--silver-2); }
     .section-head .sub { color: var(--ink-dim); max-width: 26rem; line-height: 1.65; letter-spacing: 0.1em; }
 
-    /* Part 2–6：分区渐变衔接（灵动背景位移） */
+    /* Part 2–6：分区渐变衔接 */
     @keyframes partBgDrift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -712,21 +712,513 @@
     }
     .part-map {
       min-height: 100vh; display: flex; flex-direction: column;
-      border-bottom: 1px solid rgba(255, 200, 220, 0.2);
-      background: linear-gradient(165deg, var(--y2k-a) 0%, var(--y2k-b) 48%, var(--y2k-c) 100%);
-      background-size: 220% 220%;
-      animation: partBgDrift 28s ease-in-out infinite;
+      border-bottom: 1px solid rgba(255, 200, 220, 0.15);
+      /* 背景层（CSS 多重背景，层1在下，层N在上） */
+      /* 层1：全屏深色底（图片加载失败时的保底） */
+      /* 层2：全屏图片 */
+      /* 层3：顶部衔接蒙版 → 渐变向下渗入，让 Part 1 的暖色自然消退 */
+      /* 层4：底部衔接蒙版 → 渐变向上渗入，为 Part 3 的浅色做铺垫 */
+      /* 层5：中心暗角 → 让地图和弹窗内容更可读 */
+      background:
+        /* 暗角：边缘暗、中心图片保持可见 */
+        /* beijing.png 全屏铺满（视觉主体） */
+        url(beijing.png) center center / cover no-repeat,
+        /* 顶部过渡蒙版：Part 1 的粉紫渐变从这里开始消退 */
+        linear-gradient(to bottom, rgba(20, 12, 42, 0.0) 0%, rgba(20, 12, 42, 0.80) 8%, rgba(20, 12, 42, 0.95) 18%) 0 0 / 100% 100%,
+        /* 底部过渡蒙版：向 Part 3 浅色过渡 */
+        linear-gradient(to top, rgba(20, 12, 42, 0.0) 0%, rgba(20, 12, 42, 0.88) 8%, rgba(20, 12, 42, 0.97) 18%, #140c2a 28%) 0 100% / 100% 100%,
+        /* 边缘暗角：让地图和弹窗内容更可读 */
+        radial-gradient(ellipse 130% 110% at 50% 50%, transparent 28%, rgba(10, 6, 28, 0.65) 72%) 0 0 / 100% 100%,
+        /* 保底色 */
+        #140c2a;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── 飘雪粒子 ── */
+    .p2-snow-wrap {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
+    }
+    .p2-snowflake {
+      position: absolute; top: -12px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.8);
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    /* ── 亮晶晶星尘 ── */
+    .p2-sparkles {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
+    }
+    .p2-star {
+      position: absolute;
+      background: linear-gradient(135deg, #fff 0%, #c8e8ff 40%, #d0b8ff 70%, #fff 100%);
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      filter: drop-shadow(0 0 4px rgba(200, 220, 255, 0.9));
+      pointer-events: none;
+      will-change: opacity, transform;
+      animation: p2StarTwinkle var(--dur, 2.4s) ease-in-out infinite var(--del, 0s);
+    }
+    @keyframes p2StarTwinkle {
+      0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+      40% { opacity: 0.9; transform: scale(1) rotate(60deg); }
+      60% { opacity: 0.5; transform: scale(0.75) rotate(100deg); }
+      80% { opacity: 0; transform: scale(0.4) rotate(150deg); }
+    }
+
+    .map-stage { flex: 1; min-height: calc(100vh - 60px); padding: 2.5rem 4vw 3rem; position: relative; z-index: 3; }
+
+    /* 调整 section-head 颜色以适配深色背景 */
+    .part-map .section-head h2 { color: rgba(220, 210, 255, 0.9); }
+    .part-map .section-head h2::before { background: rgba(180, 160, 240, 0.6); }
+    .part-map .section-head .h2-silver { color: rgba(180, 160, 240, 0.75); }
+    .part-map .section-head .sub { color: rgba(180, 165, 230, 0.55); }
+
+    /* 主网格：左地图 / 右弹窗 */
+    .map-dream-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 1fr) minmax(300px, 1.2fr);
+      gap: clamp(1.5rem, 4vw, 3rem);
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .map-dream-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── 地图区域 ── */
+    .map-art-wrap {
+      position: relative;
+      /* 弹窗入场动画 */
+      animation: p2MapWinEnter 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      animation-delay: 0.15s;
+    }
+    @keyframes p2MapWinEnter {
+      from { opacity: 0; transform: translateY(24px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* 地图弹窗主体（直角 Y2K 窗口） */
+    .p2-win-map {
+      position: relative;
+      background: linear-gradient(180deg, #c4c4c4 0%, #989898 100%);
+      border: 1px solid #62626c;
+      box-shadow:
+        3px 3px 0 rgba(0, 0, 0, 0.2),
+        0 14px 44px rgba(30, 15, 70, 0.38),
+        inset 0 1.5px 0 rgba(255, 255, 255, 0.7);
+      border-radius: 3px;
+    }
+    .p2-win-map__titlebar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 10px;
+      min-height: 30px;
+      background: linear-gradient(180deg, #e2e2e2 0%, #b8b8b8 42%, #a2a2a8 100%);
+      border-bottom: 1px solid #7a7a82;
+      border-radius: 3px 3px 0 0;
+      font-family: var(--mono); font-size: 0.42rem; font-weight: 400;
+      letter-spacing: 0.08em; color: #1a1a22;
+      position: relative; overflow: hidden;
+    }
+    .p2-win-map__titlebar::after {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.62) 0%, transparent 100%);
+      pointer-events: none; border-radius: 3px 3px 0 0;
+    }
+    .p2-win-map__title { flex: 1; color: #2a2a35; font-weight: 400; }
+    /* 直角内容区：亮浅蓝 Y2K 底色 */
+    .p2-win-map__body {
+      background: rgba(140, 215, 255, 0.28);
+      border-top: 1px solid rgba(100, 185, 255, 0.35);
+      border-radius: 0 0 2px 2px;
+      overflow: visible;
       position: relative;
     }
-    .map-stage { flex: 1; min-height: calc(100vh - 60px); padding: 2.5rem 4vw 3rem; }
-    .map-frame { position: relative; width: 100%; height: min(78vh, 720px); border: 1px solid var(--line-light); background: var(--white); border-radius: 4px; overflow: hidden; }
-    .map-frame svg.world { width: 100%; height: 100%; display: block; }
-    .map-grid { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px); background-size: 36px 36px; }
-    .map-marker { position: absolute; transform: translate(-50%, -50%); cursor: crosshair; z-index: 10; }
-    .map-marker .dot { width: 10px; height: 10px; border: 1px solid var(--silver-2); background: var(--white); border-radius: 50%; }
-    .map-marker .tip { position: absolute; left: 50%; bottom: calc(100% + 12px); transform: translateX(-50%) translateY(6px); white-space: nowrap; font-family: var(--mono); font-size: 0.5rem; font-weight: 300; letter-spacing: 0.08em; padding: 0.5rem 0.7rem; border: 1px solid var(--line-light); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); opacity: 0; pointer-events: none; transition: opacity 0.4s var(--ease-out), transform 0.45s var(--ease-out); max-width: 210px; white-space: normal; text-align: center; line-height: 1.5; }
-    .map-marker:hover .tip, .map-marker:focus-within .tip { opacity: 1; transform: translateX(-50%) translateY(0); }
-    .map-legend { margin-top: 1.25rem; font-family: var(--mono); font-size: 0.5rem; letter-spacing: 0.12em; color: var(--ink-dim); text-transform: uppercase; }
+    /* 背景：Y2K 浅蓝极光 */
+    .p2-win-map__body::before {
+      content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 90% 60% at 25% 35%, rgba(80, 200, 255, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 50% at 80% 55%, rgba(60, 180, 255, 0.32) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 45% at 50% 85%, rgba(100, 210, 255, 0.28) 0%, transparent 55%);
+      border-radius: 0 0 2px 2px;
+      animation: p2MapBg 16s ease-in-out infinite alternate;
+    }
+    @keyframes p2MapBg {
+      0%   { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 1;   transform: scale(1.04); }
+    }
+    /* 背景网格（Y2K 坐标纸 → 改为白色波点） */
+    .p2-win-map__body::after {
+      content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.55) 1.8px, transparent 1.8px);
+      background-size: 22px 22px;
+      border-radius: 0 0 2px 2px;
+    }
+    .map-art-surface {
+      position: relative; width: 100%;
+      aspect-ratio: 1000 / 520;
+      min-height: 220px;
+      overflow: visible;
+    }
+    .map-art-surface svg.world {
+      width: 100%; height: auto; display: block; overflow: visible;
+    }
+
+    /* ══ 白云 Y2K 浮动装饰（放大版） ══ */
+    .cloud {
+      position: absolute; pointer-events: none; z-index: 1;
+      fill: rgba(255, 255, 255, 0.72);
+      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.55));
+    }
+    .cloud--1 { width: 18%; left:  2%; top: 58%; animation: cloudFloat1 14s ease-in-out infinite; }
+    .cloud--2 { width: 14%; left: 50%; top:  5%; animation: cloudFloat2 11s ease-in-out infinite; animation-delay: -4s; }
+    .cloud--3 { width: 12%; left: 78%; top: 62%; animation: cloudFloat3 16s ease-in-out infinite; animation-delay: -8s; }
+    .cloud--4 { width: 16%; left: 28%; top: 38%; animation: cloudFloat4 13s ease-in-out infinite; animation-delay: -2s; }
+    .cloud--5 { width: 10%; left: 60%; top: 78%; animation: cloudFloat5 10s ease-in-out infinite; animation-delay: -5s; }
+    @keyframes cloudFloat1 {
+      0%, 100% { transform: translate(0,   0)   scaleX(1);    opacity: 0.72; }
+      30%       { transform: translate(5%,  -3%)  scaleX(1.1);  opacity: 0.88; }
+      65%       { transform: translate(-4%,  2.5%) scaleX(0.92); opacity: 0.6; }
+    }
+    @keyframes cloudFloat2 {
+      0%, 100% { transform: translate(0,  0)   scaleX(1);    opacity: 0.65; }
+      35%       { transform: translate(-6%, -4%)  scaleX(1.12); opacity: 0.82; }
+      72%       { transform: translate(4%,   3%)  scaleX(0.9);  opacity: 0.55; }
+    }
+    @keyframes cloudFloat3 {
+      0%, 100% { transform: translate(0,   0)   scaleX(1);    opacity: 0.68; }
+      38%       { transform: translate(4%,  -2.5%) scaleX(1.08); opacity: 0.8; }
+      75%       { transform: translate(-5%,  3%)  scaleX(0.94); opacity: 0.58; }
+    }
+    @keyframes cloudFloat4 {
+      0%, 100% { transform: translate(0,   0)   scaleX(1);    opacity: 0.7; }
+      28%       { transform: translate(-4%, -2%)  scaleX(1.1);  opacity: 0.85; }
+      68%       { transform: translate(3%,   2.5%) scaleX(0.93); opacity: 0.6; }
+    }
+    @keyframes cloudFloat5 {
+      0%, 100% { transform: translate(0,   0)   scaleX(1);    opacity: 0.62; }
+      40%       { transform: translate(5%,  -3%)  scaleX(1.1);  opacity: 0.8; }
+      78%       { transform: translate(-3%,  2%)  scaleX(0.92); opacity: 0.52; }
+    }
+
+    /* 流动描边动画 */
+    @keyframes mapStrokeDrift {
+      0% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: -220; }
+    }
+    @keyframes mapStrokeDriftSlow {
+      0% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: -160; }
+    }
+    .world .world-flow-a {
+      fill: none;
+      stroke: rgba(80, 190, 255, 0.6);
+      stroke-width: 1.2;
+      stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 6 18 3 22;
+      animation: mapStrokeDrift 22s linear infinite;
+      filter: drop-shadow(0 0 4px rgba(60, 180, 255, 0.45));
+    }
+    .world .world-flow-b {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.25);
+      stroke-width: 0.8;
+      stroke-dasharray: 14 12;
+      animation: mapStrokeDriftSlow 34s linear infinite reverse;
+      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.2));
+    }
+    .world .world-coast {
+      fill: none;
+      stroke: rgba(70, 170, 230, 0.4);
+      stroke-width: 0.7;
+      stroke-dasharray: 4 10;
+      animation: mapStrokeDrift 28s linear infinite reverse;
+    }
+
+    /* ══ 五点连线：Y2K 金银双重醒目轨迹（横跨全图） ══ */
+    /* 内层白亮辅助线（最顶层高光） */
+    .world .route-highlight {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.92);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.9))
+              drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+    }
+    /* 底衬实线（确保任何时候都可见） */
+    .world .route-base {
+      fill: none;
+      stroke: rgba(255, 215, 60, 0.85);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 10px rgba(255, 210, 50, 0.85))
+              drop-shadow(0 0 22px rgba(255, 200, 40, 0.5));
+    }
+    /* 金银双色线性渐变描边（叠加在实线上） */
+    .world .route-line {
+      fill: none;
+      stroke: url(#goldSilverGrad);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 8 20 5 15 10 22;
+      animation: routeDashFlow 3.5s linear infinite;
+      filter: drop-shadow(0 0 10px rgba(255, 230, 80, 0.8))
+              drop-shadow(0 0 22px rgba(255, 245, 130, 0.55))
+              drop-shadow(0 0 36px rgba(255, 210, 60, 0.35));
+    }
+    /* 沿路径飞行的金色粒子（大号） */
+    .world .route-dot {
+      fill: rgba(255, 248, 120, 1);
+      filter: drop-shadow(0 0 10px rgba(255, 240, 80, 1))
+              drop-shadow(0 0 22px rgba(255, 228, 60, 0.9))
+              drop-shadow(0 0 38px rgba(255, 215, 40, 0.55));
+      animation: routeDotGlow 1.3s ease-in-out infinite;
+    }
+    @keyframes routeDotGlow {
+      0%, 100% {
+        filter: drop-shadow(0 0 8px rgba(255, 235, 80, 0.85))
+                drop-shadow(0 0 18px rgba(255, 225, 60, 0.6));
+      }
+      50% {
+        filter: drop-shadow(0 0 16px rgba(255, 250, 150, 1))
+                drop-shadow(0 0 32px rgba(255, 240, 110, 0.95))
+                drop-shadow(0 0 52px rgba(255, 225, 60, 0.6));
+      }
+    }
+    /* 锚点内核（醒目金球） */
+    .world .route-node {
+      fill: rgba(255, 245, 100, 1);
+      filter: drop-shadow(0 0 10px rgba(255, 235, 70, 1))
+              drop-shadow(0 0 24px rgba(255, 225, 50, 0.75));
+    }
+    @keyframes routePulse {
+      0%   { r: 6;  opacity: 0.9; }
+      100% { r: 22; opacity: 0; }
+    }
+    .world .route-pulse-ring {
+      fill: none;
+      stroke: rgba(255, 225, 80, 0.7);
+      stroke-width: 1.6;
+      animation: routePulse 1.9s ease-out infinite;
+    }
+    @keyframes routeGlow {
+      0%   { r: 16; opacity: 0.22; }
+      100% { r: 34; opacity: 0;   }
+    }
+    .world .route-glow {
+      fill: rgba(255, 228, 70, 0.2);
+      animation: routeGlow 1.9s ease-out infinite;
+    }
+    /* 轨迹粒子（小亮点） */
+    .world .route-particle {
+      fill: rgba(255, 252, 160, 1);
+      filter: drop-shadow(0 0 8px rgba(255, 248, 120, 1))
+              drop-shadow(0 0 18px rgba(255, 240, 80, 0.75));
+    }
+    @keyframes routeDashFlow {
+      0%   { stroke-dashoffset: 0;    }
+      100% { stroke-dashoffset: -150; }
+    }
+
+    /* 地图锚点：仅图标，低饱和微光（爱心 / 星星 / 四芒星） */
+    .map-art-surface .map-marker {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 2.6rem; height: 2.6rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 10;
+    }
+    .map-marker__glow {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, currentColor 0%, transparent 72%);
+      opacity: 0.22;
+      animation: markerIconGlow 2.8s ease-in-out infinite;
+    }
+    @keyframes markerIconGlow {
+      0%, 100% { transform: scale(0.92); opacity: 0.18; }
+      50%       { transform: scale(1.08); opacity: 0.32; }
+    }
+    .map-marker__icon {
+      position: relative; z-index: 1;
+      width: 1.35rem; height: 1.35rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.45s var(--ease-out), filter 0.45s;
+    }
+    .map-marker__icon svg {
+      width: 100%; height: 100%;
+      display: block;
+      fill: currentColor;
+      opacity: 0.95;
+    }
+    /* 黑龙江：银白 → 金黄（暖调） */
+    .map-marker--heart { color: rgba(255, 225, 90, 0.92); }
+    .map-marker--heart .map-marker__icon { filter: drop-shadow(0 0 10px rgba(255, 220, 80, 0.55)); }
+    .map-marker--heart .map-marker__glow { background: radial-gradient(circle, rgba(255, 220, 80, 0.7) 0%, transparent 72%); }
+    /* 北京：冷银白（高光星） */
+    .map-marker--star { color: rgba(220, 235, 255, 0.92); }
+    .map-marker--star .map-marker__icon { filter: drop-shadow(0 0 10px rgba(200, 220, 255, 0.55)); }
+    .map-marker--star .map-marker__glow { background: radial-gradient(circle, rgba(200, 225, 255, 0.65) 0%, transparent 72%); }
+    /* 上海：浅金（亮金） */
+    .map-marker--spark { color: rgba(255, 245, 150, 0.92); }
+    .map-marker--spark .map-marker__icon { filter: drop-shadow(0 0 10px rgba(255, 240, 130, 0.55)); }
+    .map-marker--spark .map-marker__glow { background: radial-gradient(circle, rgba(255, 240, 130, 0.7) 0%, transparent 72%); }
+    @media (hover: hover) {
+      .map-art-surface .map-marker:hover .map-marker__icon,
+      .map-art-surface .map-marker:focus-within .map-marker__icon {
+        transform: scale(1.35);
+        filter: brightness(1.15);
+      }
+      .map-art-surface .map-marker:hover .map-marker__glow,
+      .map-art-surface .map-marker:focus-within .map-marker__glow {
+        opacity: 0.42;
+        animation: none;
+      }
+    }
+    .map-art-surface .map-marker .tip {
+      position: absolute; left: 50%; bottom: calc(100% + 14px);
+      transform: translateX(-50%) translateY(6px);
+      font-family: var(--mono); font-size: 0.46rem; font-weight: 300;
+      letter-spacing: 0.07em; padding: 0.5rem 0.65rem;
+      border: 1px solid rgba(140, 165, 220, 0.5);
+      background: rgba(8, 6, 22, 0.85);
+      color: rgba(225, 235, 255, 0.95);
+      backdrop-filter: blur(14px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s var(--ease-out), transform 0.45s var(--ease-out);
+      max-width: 230px; white-space: normal; text-align: center; line-height: 1.55;
+    }
+    .map-art-surface .map-marker:hover .tip,
+    .map-art-surface .map-marker:focus-within .tip { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .map-legend {
+      margin-top: 0.85rem;
+      font-family: var(--mono); font-size: 0.46rem; letter-spacing: 0.12em;
+      color: rgba(160, 180, 220, 0.5); text-transform: uppercase;
+    }
+
+    /* ══ 弹窗堆叠区 ══ */
+    .retro-win-stack {
+      position: relative; width: 100%; max-width: 540px;
+      min-height: min(72vh, 640px); margin-left: auto; margin-right: auto;
+      perspective: 900px;
+    }
+    .retro-win {
+      position: absolute;
+      width: clamp(175px, 38vw, 265px);
+      border-radius: 7px 7px 5px 5px;
+      overflow: visible;
+      background: linear-gradient(180deg, #c8c8c8 0%, #9a9a9a 100%);
+      border: 1px solid #666670;
+      box-shadow:
+        2px 2px 0 rgba(0, 0, 0, 0.22),
+        0 16px 48px rgba(30, 15, 70, 0.4),
+        inset 0 1.5px 0 rgba(255, 255, 255, 0.65);
+      cursor: grab;
+      user-select: none;
+      will-change: transform;
+      /* 默认待机浮沉动画 */
+      animation: winFloat 4.5s ease-in-out infinite;
+    }
+    /* 入场动画（JS 控制类名） */
+    .retro-win.win-enter { animation: none; }
+    .retro-win--w1 { left: 0;    top: 10%;  z-index: 1; transform: rotate(-2.5deg); animation-delay: 0s;    }
+    .retro-win--w2 { left: 20%; top: 0;    z-index: 4; transform: rotate(1.6deg);  width: clamp(185px, 40vw, 278px); animation-delay: 0.6s; }
+    .retro-win--w3 { right: 0;  top: 7%;   left: auto; z-index: 2; transform: rotate(2.2deg); animation-delay: 1.2s; }
+    .retro-win--w4 { left: 10%; bottom: 0; top: auto; z-index: 3; transform: rotate(-1.2deg); width: clamp(178px, 38vw, 262px); animation-delay: 1.8s; }
+
+    @keyframes winFloat {
+      0%, 100% { transform: translateY(0px) rotate(var(--init-rot, 0deg)); }
+      28%       { transform: translateY(-5px) rotate(var(--init-rot, 0deg)); }
+      72%       { transform: translateY(3px) rotate(var(--init-rot, 0deg)); }
+    }
+    /* 每个窗记住自己的初始旋转角度 */
+    .retro-win--w1 { --init-rot: -2.5deg; }
+    .retro-win--w2 { --init-rot:  1.6deg; }
+    .retro-win--w3 { --init-rot:  2.2deg; }
+    .retro-win--w4 { --init-rot: -1.2deg; }
+
+    .retro-win:active { cursor: grabbing; }
+    .retro-win.is-dragging {
+      animation: none !important;
+      box-shadow:
+        4px 6px 0 rgba(0, 0, 0, 0.25),
+        0 28px 72px rgba(30, 15, 70, 0.55),
+        inset 0 1.5px 0 rgba(255, 255, 255, 0.65);
+    }
+
+    /* 弹窗窗口标题栏 */
+    .retro-win__titlebar {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.35rem;
+      min-height: 28px; padding: 0 7px 0 9px;
+      background: linear-gradient(180deg, #e8e8e8 0%, #c0c0c0 42%, #aaaaa8 100%);
+      border-bottom: 1px solid #787882;
+      border-radius: 6px 6px 0 0;
+      font-family: var(--mono); font-size: 0.4rem; font-weight: 400;
+      letter-spacing: 0.06em; color: #1a1a22;
+      position: relative; overflow: hidden;
+    }
+    .retro-win__titlebar::after {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, transparent 100%);
+      pointer-events: none; border-radius: 6px 6px 0 0;
+    }
+    .retro-win__title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .retro-win__close {
+      flex-shrink: 0; width: 18px; height: 18px;
+      border: 1px solid #606068; border-radius: 2px;
+      background: linear-gradient(180deg, #e0e0e0 0%, #a0a0a0 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 1px 2px rgba(0,0,0,0.2);
+      position: relative; cursor: pointer;
+    }
+    .retro-win__close::before,
+    .retro-win__close::after {
+      content: ""; position: absolute; left: 50%; top: 50%;
+      width: 9px; height: 1px; background: #2a2a32;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .retro-win__close::after { transform: translate(-50%, -50%) rotate(-45deg); }
+    /* 弹窗图片区域 */
+    .retro-win__body {
+      background: #0a0818; line-height: 0;
+      border-radius: 0 0 4px 4px; overflow: hidden;
+      pointer-events: none;
+    }
+    .retro-win__body img {
+      width: 100%; height: auto; display: block;
+      aspect-ratio: 3 / 4; object-fit: cover;
+      pointer-events: auto; cursor: pointer;
+      transition: transform 0.4s var(--ease-out), filter 0.4s;
+    }
+    @media (hover: hover) {
+      .retro-win__body img:hover {
+        transform: scale(1.06);
+        filter: brightness(1.1) saturate(1.15);
+      }
+      /* hover 弹窗本身时：浮起 + 去旋转 */
+      .retro-win:hover {
+        animation: none !important;
+        transform: rotate(0deg) scale(1.05) translateY(-8px) !important;
+        box-shadow:
+          2px 6px 0 rgba(0,0,0,0.22),
+          0 26px 64px rgba(30,15,70,0.5),
+          inset 0 1.5px 0 rgba(255,255,255,0.65);
+        z-index: 999 !important;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .retro-win-stack { min-height: min(65vh, 580px) !important; }
+      .retro-win { width: clamp(155px, 42vw, 240px); }
+      .retro-win--w1 { left: 0;  top: 4%;  transform: rotate(-1.8deg); --init-rot: -1.8deg; }
+      .retro-win--w2 { left: 35%; top: 0;  transform: rotate(1.2deg);  --init-rot:  1.2deg; }
+      .retro-win--w3 { right: 0; top: 18%; transform: rotate(1.8deg);  --init-rot:  1.8deg; }
+      .retro-win--w4 { left: 6%;  bottom: 2%; transform: rotate(-1deg); --init-rot: -1deg; }
+    }
 
     /* Part 3 星空立方体 */
     .part-cube {
@@ -858,21 +1350,6 @@
       animation: partBgDrift 30s ease-in-out infinite reverse;
     }
     .proj-block { max-width: 720px; margin: 3rem auto 0; padding: 1.5rem clamp(1rem, 4vw, 1.75rem) 1.75rem; border-radius: 8px; background: rgba(255, 255, 255, 0.72); border: 1px solid var(--line-light); border-left: 3px solid var(--silver-2); box-shadow: 0 8px 36px rgba(0, 0, 0, 0.06); }
-
-    /* 02 地图：标记点 + 外框光晕 */
-    .map-frame { transition: box-shadow 0.5s var(--ease-out); }
-    @media (hover: hover) {
-      .map-frame:hover {
-        box-shadow: 0 0 0 1px var(--silver-2), 0 0 28px rgba(200, 160, 255, 0.2), 0 16px 52px rgba(0, 0, 0, 0.09);
-      }
-      .map-marker .dot { transition: transform 0.45s var(--ease-out), background 0.35s, box-shadow 0.45s var(--ease-out); }
-      .map-marker:hover .dot, .map-marker:focus-within .dot {
-        background: var(--ink);
-        transform: scale(1.5);
-        border-color: var(--ink);
-        box-shadow: 0 0 0 5px rgba(200, 160, 255, 0.3), 0 0 14px rgba(255, 120, 200, 0.45);
-      }
-    }
 
     /* 05 项目：提亮系交互（无手电筒） */
     .part-projects { position: relative; }
@@ -1616,35 +2093,220 @@
   </div>
 </section>
 
-<!-- Part 2 地图 -->
+<!-- Part 2 深色梦核桌面：流动线稿地图 + 复古弹窗海报 -->
 <section class="part-map" id="p2">
+  <!-- 飘雪层 -->
+  <div class="p2-snow-wrap" id="p2Snow" aria-hidden="true"></div>
+  <!-- 亮晶晶星尘 -->
+  <div class="p2-sparkles" id="p2Sparkles" aria-hidden="true"></div>
+
   <div class="section-head reveal reveal-d0">
-    <h2><span class="h2-silver">02</span> // GEO_ANCHOR</h2>
-    <span class="sub">Hover markers · 锚点悬停查看</span>
+    <h2><span class="h2-silver">02</span> // GEO_DESKTOP</h2>
+    <span class="sub">三点轨迹 · 悬停图标看说明 · haibao1/2 为 jpeg，3/4 为 png（与 index 同目录）</span>
   </div>
   <div class="map-stage">
-    <div class="map-frame reveal reveal-d1">
-      <svg class="world" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet" aria-label="示意世界地图">
-        <rect width="1000" height="500" fill="#f0f0f0"/>
-        <g fill="none" stroke="#c8cad0" stroke-width="0.8" opacity="0.6">
-          <path d="M120,180 Q200,120 320,140 T480,160 Q520,200 500,260 Q420,320 300,300 Q180,280 120,220 Z"/>
-          <path d="M480,100 Q600,80 720,100 Q820,140 780,220 Q700,280 580,260 Q500,220 480,160 Z"/>
-          <path d="M200,320 Q280,300 400,340 Q520,400 440,460 Q320,480 220,420 Z"/>
-          <path d="M520,280 Q640,260 760,300 Q840,360 780,420 Q660,440 560,400 Z"/>
-        </g>
-        <g fill="#e0e2e6" stroke="#c8cad0" stroke-width="0.6" opacity="0.7">
-          <path d="M680,95 L920,85 L940,200 L860,240 L720,200 Z"/>
-          <path d="M700,200 L880,220 L900,320 L760,340 L680,260 Z"/>
-          <path d="M620,120 L700,100 L720,180 L640,200 Z"/>
-        </g>
-        <text x="50" y="40" font-family="JetBrains Mono, monospace" font-size="11" fill="#aaaaaa" letter-spacing="4">WORLD_GRID // ASIA_FOCUS</text>
-      </svg>
-      <div class="map-grid"></div>
-      <div class="map-marker" style="left: 78%; top: 28%;" tabindex="0"><div class="tip">黑龙江 · 家乡<br/>HEILONGJIANG / HOMETOWN</div><div class="dot"></div></div>
-      <div class="map-marker" style="left: 81.5%; top: 35%;" tabindex="0"><div class="tip">北京 · 小红书实习<br/>BEIJING / XIAOHONGSHU INTERN</div><div class="dot"></div></div>
-      <div class="map-marker" style="left: 84%; top: 44%;" tabindex="0"><div class="tip">上海 · 读书 + 美团实习<br/>SHANGHAI / UNDERGRAD + MEITUAN INTERN</div><div class="dot"></div></div>
+    <div class="map-dream-grid">
+      <!-- 左：地图 -->
+      <div class="map-art-wrap">
+        <!-- 直角 Y2K 弹窗包裹 -->
+        <div class="p2-win-map">
+          <div class="p2-win-map__titlebar">
+            <span class="p2-win-map__title">TRACE_MAP // 轨迹</span>
+          </div>
+          <div class="p2-win-map__body">
+            <div class="map-art-surface">
+            <!-- 白云层（z-index 1，SVG 盖在上方 z-index 2） -->
+            <svg class="cloud cloud--1" viewBox="0 0 100 55" aria-hidden="true" focusable="false">
+              <ellipse cx="50" cy="32" rx="40" ry="18"/>
+              <ellipse cx="30" cy="26" rx="22" ry="15"/>
+              <ellipse cx="72" cy="26" rx="20" ry="14"/>
+              <ellipse cx="50" cy="20" rx="16" ry="12"/>
+            </svg>
+            <svg class="cloud cloud--2" viewBox="0 0 100 55" aria-hidden="true" focusable="false">
+              <ellipse cx="50" cy="32" rx="36" ry="16"/>
+              <ellipse cx="28" cy="27" rx="20" ry="13"/>
+              <ellipse cx="70" cy="27" rx="18" ry="12"/>
+              <ellipse cx="48" cy="21" rx="14" ry="11"/>
+            </svg>
+            <svg class="cloud cloud--3" viewBox="0 0 100 55" aria-hidden="true" focusable="false">
+              <ellipse cx="50" cy="33" rx="34" ry="15"/>
+              <ellipse cx="26" cy="28" rx="18" ry="12"/>
+              <ellipse cx="68" cy="28" rx="16" ry="11"/>
+              <ellipse cx="47" cy="22" rx="13" ry="10"/>
+            </svg>
+            <svg class="cloud cloud--4" viewBox="0 0 100 55" aria-hidden="true" focusable="false">
+              <ellipse cx="50" cy="32" rx="38" ry="17"/>
+              <ellipse cx="29" cy="27" rx="21" ry="14"/>
+              <ellipse cx="71" cy="27" rx="19" ry="13"/>
+              <ellipse cx="49" cy="21" rx="15" ry="11"/>
+            </svg>
+            <svg class="cloud cloud--5" viewBox="0 0 100 55" aria-hidden="true" focusable="false">
+              <ellipse cx="50" cy="33" rx="33" ry="14"/>
+              <ellipse cx="25" cy="28" rx="17" ry="11"/>
+              <ellipse cx="67" cy="28" rx="15" ry="10"/>
+              <ellipse cx="46" cy="22" rx="12" ry="9"/>
+            </svg>
+          <svg class="world" viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet" aria-label="艺术化线稿地图 — 黑龙江 / 北京 / 上海三点连线" style="position:relative;z-index:2">
+            <defs>
+              <!-- 金银双色渐变：冷银 → 暖金 → 冷银 -->
+              <linearGradient id="goldSilverGrad" x1="0" y1="0" x2="1" y2="1" gradientUnits="userSpaceOnUse">
+                <stop offset="0%"   stop-color="rgba(200, 220, 255, 0.85)"/>
+                <stop offset="30%"  stop-color="rgba(255, 228, 88, 0.95)"/>
+                <stop offset="60%"  stop-color="rgba(255, 255, 220, 1)"/>
+                <stop offset="100%" stop-color="rgba(200, 215, 255, 0.8)"/>
+              </linearGradient>
+              <filter id="glow2">
+                <feGaussianBlur stdDeviation="2" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <text x="44" y="38" font-family="JetBrains Mono, monospace" font-size="10" fill="rgba(100, 190, 255, 0.45)" letter-spacing="3">FLUID_OUTLINE // ASIA_FOCUS</text>
+
+            <!-- 流动轮廓层 A（主色） -->
+            <g class="world-flow-layer">
+              <path class="world-flow-a" d="M120,180 Q200,120 320,140 T480,160 Q520,200 500,260 Q420,320 300,300 Q180,280 120,220 Z"/>
+              <path class="world-flow-a" d="M480,100 Q600,80 720,100 Q820,140 780,220 Q700,280 580,260 Q500,220 480,160 Z"/>
+              <path class="world-flow-a" d="M200,320 Q280,300 400,340 Q520,400 440,460 Q320,480 220,420 Z"/>
+              <path class="world-flow-a" d="M520,280 Q640,260 760,300 Q840,360 780,420 Q660,440 560,400 Z"/>
+            </g>
+            <!-- 流动轮廓层 B（白色淡层） -->
+            <g class="world-flow-layer">
+              <path class="world-flow-b" d="M120,180 Q200,120 320,140 T480,160 Q520,200 500,260 Q420,320 300,300 Q180,280 120,220 Z"/>
+              <path class="world-flow-b" d="M480,100 Q600,80 720,100 Q820,140 780,220 Q700,280 580,260 Q500,220 480,160 Z"/>
+            </g>
+            <!-- 细节海岸线 -->
+            <g class="world-detail-layer">
+              <path class="world-coast" d="M680,95 L920,85 L940,200 L860,240 L720,200 Z"/>
+              <path class="world-coast" d="M700,200 L880,220 L900,320 L760,340 L680,260 Z"/>
+              <path class="world-coast" d="M620,120 L700,100 L720,180 L640,200 Z"/>
+            </g>
+
+            <!--
+              五点坐标（SVG viewBox 1000×520）：
+                乌鲁木齐 (URC): x=215, y=205
+                哈尔滨   (HRB): x=780, y=100
+                北京     (BJS): x=815, y=152
+                上海     (SHA): x=840, y=202
+                广州     (CAN): x=875, y=305
+              连线：URC → HRB → BJS → SHA → CAN
+              风格：Y2K 金银双色发光轨迹 + 粒子飞溅
+            -->
+            <!-- 锚点脉冲外圈（5个锚点 × 2个脉冲环） -->
+            <circle class="route-pulse-ring" r="6" cx="215" cy="205" style="animation-delay:0s"/>
+            <circle class="route-pulse-ring" r="6" cx="215" cy="205" style="animation-delay:0.7s"/>
+            <circle class="route-pulse-ring" r="6" cx="780" cy="100" style="animation-delay:0.35s"/>
+            <circle class="route-pulse-ring" r="6" cx="780" cy="100" style="animation-delay:1.05s"/>
+            <circle class="route-pulse-ring" r="6" cx="815" cy="152" style="animation-delay:0.6s"/>
+            <circle class="route-pulse-ring" r="6" cx="815" cy="152" style="animation-delay:1.3s"/>
+            <circle class="route-pulse-ring" r="6" cx="840" cy="202" style="animation-delay:0.8s"/>
+            <circle class="route-pulse-ring" r="6" cx="840" cy="202" style="animation-delay:1.55s"/>
+            <circle class="route-pulse-ring" r="6" cx="875" cy="305" style="animation-delay:0.2s"/>
+            <circle class="route-pulse-ring" r="6" cx="875" cy="305" style="animation-delay:0.9s"/>
+            <!-- 锚点金色光晕 -->
+            <circle class="route-glow" r="14" cx="215" cy="205" style="animation-delay:0s"/>
+            <circle class="route-glow" r="14" cx="780" cy="100" style="animation-delay:0.5s"/>
+            <circle class="route-glow" r="14" cx="815" cy="152" style="animation-delay:1s"/>
+            <circle class="route-glow" r="14" cx="840" cy="202" style="animation-delay:1.5s"/>
+            <circle class="route-glow" r="14" cx="875" cy="305" style="animation-delay:0.25s"/>
+            <!-- 锚点内核（金色） -->
+            <circle class="route-node" r="5" cx="215" cy="205"/>
+            <circle class="route-node" r="5" cx="780" cy="100"/>
+            <circle class="route-node" r="5" cx="815" cy="152"/>
+            <circle class="route-node" r="5" cx="840" cy="202"/>
+            <circle class="route-node" r="5" cx="875" cy="305"/>
+            <!-- 五段轨迹（底衬 → 白高光 → 渐变虚线，顶层覆盖） -->
+            <path class="route-base"
+              d="M 215,205 L 780,100 L 815,152 L 840,202 L 875,305"/>
+            <path class="route-highlight"
+              d="M 215,205 L 780,100 L 815,152 L 840,202 L 875,305"/>
+            <path class="route-line"
+              d="M 215,205 L 780,100 L 815,152 L 840,202 L 875,305"
+              filter="url(#glow2)"/>
+            <!-- 主流动光点（3个） -->
+            <circle class="route-dot" r="5" cx="215" cy="205">
+              <animateMotion dur="5s" repeatCount="indefinite" path="M 215,205 L 780,100 L 815,152 L 840,202 L 875,305"/>
+            </circle>
+            <circle class="route-dot" r="3.5" cx="215" cy="205" opacity="0.7">
+              <animateMotion dur="5s" repeatCount="indefinite" begin="1.7s" path="M 215,205 L 780,100 L 815,152 L 840,202 L 875,305"/>
+            </circle>
+            <circle class="route-dot" r="2.5" cx="215" cy="205" opacity="0.45">
+              <animateMotion dur="5s" repeatCount="indefinite" begin="3.4s" path="M 215,205 L 780,100 L 815,152 L 840,202 L 875,305"/>
+            </circle>
+            <!-- 轨迹粒子（2组小亮点） -->
+            <circle class="route-particle" r="3" cx="215" cy="205">
+              <animateMotion dur="3.5s" repeatCount="indefinite" begin="0.5s" path="M 215,205 L 780,100 L 815,152 L 840,202 L 875,305"/>
+            </circle>
+            <circle class="route-particle" r="2" cx="215" cy="205">
+              <animateMotion dur="3.5s" repeatCount="indefinite" begin="2s" path="M 215,205 L 780,100 L 815,152 L 840,202 L 875,305"/>
+            </circle>
+          </svg>
+
+          <!-- 锚点 1：乌鲁木齐 -->
+          <div class="map-marker map-marker--star" style="left: calc(215/1000 * 100%); top: calc(205/520 * 100%);" tabindex="0" aria-label="乌鲁木齐">
+            <span class="map-marker__glow" aria-hidden="true"></span>
+            <span class="map-marker__icon" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6L12 2z"/></svg></span>
+          </div>
+          <!-- 锚点 2：黑龙江 -->
+          <div class="map-marker map-marker--heart" style="left: calc(780/1000 * 100%); top: calc(100/520 * 100%);" tabindex="0" aria-label="黑龙江 · 家乡">
+            <span class="map-marker__glow" aria-hidden="true"></span>
+            <span class="map-marker__icon" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 20.35l-1.45-1.32C5.4 14.36 2 11.28 2 7.5 2 5.42 3.42 4 5.5 4c1.74 0 3.41 1.01 4.5 2.09C11.09 5.01 12.76 4 14.5 4 16.58 4 18 5.42 18 7.5c0 3.78-3.4 6.86-8.55 11.54L12 20.35z"/></svg></span>
+            <div class="tip">黑龙江 · 家乡<br/>HEILONGJIANG / HOMETOWN</div>
+          </div>
+          <!-- 锚点 3：北京 -->
+          <div class="map-marker map-marker--spark" style="left: calc(815/1000 * 100%); top: calc(152/520 * 100%);" tabindex="0" aria-label="北京 · 小红书实习">
+            <span class="map-marker__glow" aria-hidden="true"></span>
+            <span class="map-marker__icon" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polygon points="12,3 14.2,10.2 21.5,12 14.2,13.8 12,21 9.8,13.8 2.5,12 9.8,10.2"/></svg></span>
+            <div class="tip">北京 · 小红书实习<br/>BEIJING / XIAOHONGSHU</div>
+          </div>
+          <!-- 锚点 4：上海 -->
+          <div class="map-marker map-marker--heart" style="left: calc(840/1000 * 100%); top: calc(202/520 * 100%);" tabindex="0" aria-label="上海 · 读书 + 美团实习">
+            <span class="map-marker__glow" aria-hidden="true"></span>
+            <span class="map-marker__icon" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 20.35l-1.45-1.32C5.4 14.36 2 11.28 2 7.5 2 5.42 3.42 4 5.5 4c1.74 0 3.41 1.01 4.5 2.09C11.09 5.01 12.76 4 14.5 4 16.58 4 18 5.42 18 7.5c0 3.78-3.4 6.86-8.55 11.54L12 20.35z"/></svg></span>
+            <div class="tip">上海 · 读书 + 美团实习<br/>SHANGHAI / MEITUAN</div>
+          </div>
+          <!-- 锚点 5：广州 -->
+          <div class="map-marker map-marker--spark" style="left: calc(875/1000 * 100%); top: calc(305/520 * 100%);" tabindex="0" aria-label="广州">
+            <span class="map-marker__glow" aria-hidden="true"></span>
+            <span class="map-marker__icon" aria-hidden="true"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polygon points="12,3 14.2,10.2 21.5,12 14.2,13.8 12,21 9.8,13.8 2.5,12 9.8,10.2"/></svg></span>
+          </div>
+        </div>
+        <p class="map-legend">轨迹：乌鲁木齐 → 黑龙江 → 北京 → 上海 → 广州 · 悬停图标查看详情</p>
+          </div><!-- /.p2-win-map__body -->
+        </div><!-- /.p2-win-map -->
+      </div>
+
+      <!-- 右：弹窗抽卡叠层 -->
+      <div class="retro-win-stack reveal reveal-d2" id="p2WinStack">
+        <article class="retro-win retro-win--w1" data-win="1">
+          <header class="retro-win__titlebar">
+            <span class="retro-win__title">MEMORY_01</span>
+            <button class="retro-win__close" title="关闭" aria-label="关闭此窗口"></button>
+          </header>
+          <div class="retro-win__body"><img src="haibao1.jpeg" alt="海报 1" width="600" height="800" loading="lazy" decoding="async"/></div>
+        </article>
+        <article class="retro-win retro-win--w2" data-win="2">
+          <header class="retro-win__titlebar">
+            <span class="retro-win__title">MEMORY_02</span>
+            <button class="retro-win__close" title="关闭" aria-label="关闭此窗口"></button>
+          </header>
+          <div class="retro-win__body"><img src="haibao2.jpeg" alt="海报 2" width="600" height="800" loading="lazy" decoding="async"/></div>
+        </article>
+        <article class="retro-win retro-win--w3" data-win="3">
+          <header class="retro-win__titlebar">
+            <span class="retro-win__title">MEMORY_03</span>
+            <button class="retro-win__close" title="关闭" aria-label="关闭此窗口"></button>
+          </header>
+          <div class="retro-win__body"><img src="haibao3.png" alt="海报 3" width="600" height="800" loading="lazy" decoding="async"/></div>
+        </article>
+        <article class="retro-win retro-win--w4" data-win="4">
+          <header class="retro-win__titlebar">
+            <span class="retro-win__title">MEMORY_04</span>
+            <button class="retro-win__close" title="关闭" aria-label="关闭此窗口"></button>
+          </header>
+          <div class="retro-win__body"><img src="haibao4.png" alt="海报 4" width="600" height="800" loading="lazy" decoding="async"/></div>
+        </article>
+      </div>
     </div>
-    <p class="map-legend">ANCHORS: HLJ_01 · SHA_02 · BJS_03 · 坐标为示意，可替换为真实地图瓦片</p>
   </div>
 </section>
 
@@ -2774,6 +3436,308 @@
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(registerMagnets, 300);
     });
+  })();
+
+})();
+
+
+/* ═══════════════════════════════════════════════════════
+   PART 2 — 弹窗拖拽（弹簧+惯性） · 飘雪 · 亮晶晶 · 入场动画
+═══════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+
+  /* ── 工具 ── */
+  function clamp(v, mn, mx) { return Math.max(mn, Math.min(mx, v)); }
+
+  /* ── 1. 弹窗入场弹入 + 拖拽（弹簧+惯性） ── */
+  (function () {
+    var stack = document.getElementById("p2WinStack");
+    if (!stack) return;
+    var wins = Array.prototype.slice.call(stack.querySelectorAll(".retro-win"));
+    var activeWin = null;
+    var drag = { startX: 0, startY: 0, startL: 0, startT: 0 };
+    var vel = { x: 0, y: 0 };
+    var lastX = 0, lastY = 0;
+    var rafId = null;
+    var inertiaId = null;
+    var isDragging = false;
+
+    /* 入场动画：页面可见后依次弹入 */
+    var entered = false;
+    /* 抽卡入场：每张窗独立起始旋转，大幅弹出 + 模糊消散 */
+    var enterRot = [-22, 16, -18, 14];
+    function tryEnter() {
+      if (entered) return;
+      var obs = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) {
+          entered = true;
+          obs.disconnect();
+          wins.forEach(function (win, i) {
+            var r0 = enterRot[i] || 0;
+            win.style.opacity = "0";
+            win.style.filter = "blur(14px)";
+            win.style.transform =
+              "scale(0.18) translateY(200px) translateX(" + (i % 2 === 0 ? -40 : 40) + "px) rotate(" + r0 + "deg)";
+            win.style.transition = "none";
+            (function (w, idx, rotStart) {
+              setTimeout(function () {
+                w.style.transition =
+                  "opacity 1s cubic-bezier(0.15,0.85,0.2,1), " +
+                  "transform 1.15s cubic-bezier(0.34,1.85,0.45,1), " +
+                  "filter 0.9s cubic-bezier(0.22,1,0.36,1)";
+                w.style.opacity = "1";
+                w.style.filter = "blur(0px)";
+                w.style.transform = "";
+              }, idx * 240);
+            })(win, i, r0);
+          });
+          setTimeout(function () {
+            wins.forEach(function (w) {
+              w.style.transition = "";
+              w.style.filter = "";
+            });
+          }, wins.length * 240 + 1300);
+        }
+      }, { threshold: 0.08 });
+      obs.observe(stack);
+    }
+
+    /* 弹簧物理参数 */
+    var SPRING_K    = 0.18;   /* 弹簧刚度 */
+    var FRICTION    = 0.78;   /* 摩擦衰减 */
+    var MIN_VEL     = 0.4;    /* 停止阈值 */
+
+    function springStep(win) {
+      var ox = parseFloat(win.dataset.targetL) - parseFloat(win.style.left || "0");
+      var oy = parseFloat(win.dataset.targetT) - parseFloat(win.style.top  || "0");
+      vel.x += ox * SPRING_K;
+      vel.y += oy * SPRING_K;
+      vel.x *= FRICTION;
+      vel.y *= FRICTION;
+      var curL = parseFloat(win.style.left || "0") + vel.x;
+      var curT = parseFloat(win.style.top  || "0") + vel.y;
+      win.style.left = curL + "px";
+      win.style.top  = curT + "px";
+      var moving = Math.abs(vel.x) > MIN_VEL || Math.abs(vel.y) > MIN_VEL;
+      if (moving) {
+        inertiaId = requestAnimationFrame(function () { springStep(win); });
+      } else {
+        /* 弹回目标位置 */
+        win.style.left = win.dataset.targetL + "px";
+        win.style.top  = win.dataset.targetT + "px";
+        /* 恢复待机动画 */
+        win.style.transition = "";
+      }
+    }
+
+    function stopSpring() {
+      if (inertiaId) { cancelAnimationFrame(inertiaId); inertiaId = null; }
+    }
+
+    wins.forEach(function (win) {
+      var tb = win.querySelector(".retro-win__titlebar");
+      if (!tb) return;
+
+      /* 鼠标按下 */
+      tb.addEventListener("mousedown", function (e) {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        stopSpring();
+        isDragging = true;
+        activeWin = win;
+        win.classList.add("is-dragging");
+        /* 记录起始位置 */
+        var rect = win.getBoundingClientRect();
+        var stackRect = stack.getBoundingClientRect();
+        drag.startX = e.clientX;
+        drag.startY = e.clientY;
+        drag.startL = rect.left - stackRect.left;
+        drag.startT = rect.top  - stackRect.top;
+        vel.x = 0; vel.y = 0;
+        lastX = e.clientX; lastY = e.clientY;
+        /* 提到最顶 */
+        wins.forEach(function (w) { w.style.zIndex = w.dataset.baseZ || "auto"; });
+        win.style.zIndex = 9999;
+        win.dataset.baseZ = win.style.zIndex;
+      });
+
+      /* 关闭按钮 */
+      var closeBtn = win.querySelector(".retro-win__close");
+      if (closeBtn) {
+        closeBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          win.style.transition = "opacity 0.4s, transform 0.4s cubic-bezier(0.55,0,1,0.45)";
+          win.style.opacity = "0";
+          win.style.transform = "scale(0.6) translateY(-20px) rotate(8deg) !important";
+          setTimeout(function () { win.style.display = "none"; }, 420);
+        });
+      }
+
+      /* 双击重置 */
+      tb.addEventListener("dblclick", function () {
+        stopSpring();
+        win.style.transition = "left 0.6s cubic-bezier(0.34,1.56,0.64,1), top 0.6s cubic-bezier(0.34,1.56,0.64,1), transform 0.6s cubic-bezier(0.34,1.56,0.64,1)";
+        win.style.left = "";
+        win.style.top  = "";
+        win.style.transform = "";
+        win.style.zIndex = win.dataset.origZ || "auto";
+        win.dataset.targetL = win.offsetLeft;
+        win.dataset.targetT = win.offsetTop;
+        setTimeout(function () { win.style.transition = ""; }, 650);
+      });
+    });
+
+    document.addEventListener("mousemove", function (e) {
+      if (!isDragging || !activeWin) return;
+      var dx = e.clientX - drag.startX;
+      var dy = e.clientY - drag.startY;
+      vel.x = (e.clientX - lastX) * 0.6; /* 记录速度 */
+      vel.y = (e.clientY - lastY) * 0.6;
+      lastX = e.clientX; lastY = e.clientY;
+      var stackRect = stack.getBoundingClientRect();
+      var maxL = stackRect.width  - activeWin.offsetWidth  - 4;
+      var maxT = stackRect.height - activeWin.offsetHeight - 4;
+      activeWin.style.left = clamp(drag.startL + dx, -activeWin.offsetWidth * 0.4, maxL) + "px";
+      activeWin.style.top  = clamp(drag.startT + dy, -activeWin.offsetHeight * 0.4, maxT) + "px";
+      activeWin.style.transform = "rotate(0deg) scale(1.04)";
+    });
+
+    document.addEventListener("mouseup", function () {
+      if (!isDragging) return;
+      isDragging = false;
+      if (!activeWin) return;
+      activeWin.classList.remove("is-dragging");
+      /* 记录当前真实位置（用于计算弹簧目标） */
+      activeWin.dataset.targetL = activeWin.style.left;
+      activeWin.dataset.targetT = activeWin.style.top;
+      /* 松手回弹：弹簧 + 惯性 */
+      activeWin.style.transition = "none";
+      vel.x *= 1.8; vel.y *= 1.8;
+      /* 加上随机回旋 */
+      var r = (Math.random() - 0.5) * 5;
+      /* 恢复 CSS 默认旋转（待机动画会自动加回来） */
+      activeWin.style.transform = "";
+      /* 触发弹簧回正 */
+      inertiaId = requestAnimationFrame(function () { springStep(activeWin); });
+      activeWin = null;
+    });
+
+    /* 触摸支持 */
+    wins.forEach(function (win) {
+      var tb = win.querySelector(".retro-win__titlebar");
+      if (!tb) return;
+      tb.addEventListener("touchstart", function (e) {
+        var t = e.touches[0];
+        stopSpring();
+        isDragging = true;
+        activeWin = win;
+        win.classList.add("is-dragging");
+        var rect = win.getBoundingClientRect();
+        var stackRect = stack.getBoundingClientRect();
+        drag.startX = t.clientX; drag.startY = t.clientY;
+        drag.startL = rect.left - stackRect.left;
+        drag.startT = rect.top  - stackRect.top;
+        vel.x = 0; vel.y = 0;
+        lastX = t.clientX; lastY = t.clientY;
+        wins.forEach(function (w) { w.style.zIndex = w.dataset.baseZ || "auto"; });
+        win.style.zIndex = 9999;
+      }, { passive: true });
+    });
+    document.addEventListener("touchmove", function (e) {
+      if (!isDragging || !activeWin) return;
+      var t = e.touches[0];
+      var dx = t.clientX - drag.startX;
+      var dy = t.clientY - drag.startY;
+      vel.x = (t.clientX - lastX) * 0.6; vel.y = (t.clientY - lastY) * 0.6;
+      lastX = t.clientX; lastY = t.clientY;
+      var stackRect = stack.getBoundingClientRect();
+      var maxL = stackRect.width  - activeWin.offsetWidth  - 4;
+      var maxT = stackRect.height - activeWin.offsetHeight - 4;
+      activeWin.style.left = clamp(drag.startL + dx, -activeWin.offsetWidth * 0.4, maxL) + "px";
+      activeWin.style.top  = clamp(drag.startT + dy, -activeWin.offsetHeight * 0.4, maxT) + "px";
+      activeWin.style.transform = "rotate(0deg)";
+    }, { passive: true });
+    document.addEventListener("touchend", function () {
+      if (!isDragging) return;
+      isDragging = false;
+      if (!activeWin) return;
+      activeWin.classList.remove("is-dragging");
+      activeWin.dataset.targetL = activeWin.style.left;
+      activeWin.dataset.targetT = activeWin.style.top;
+      activeWin.style.transition = "none";
+      vel.x *= 1.8; vel.y *= 1.8;
+      activeWin.style.transform = "";
+      inertiaId = requestAnimationFrame(function () { springStep(activeWin); });
+      activeWin = null;
+    });
+
+    tryEnter();
+  })();
+
+  /* ── 2. 飘雪 ── */
+  (function () {
+    var wrap = document.getElementById("p2Snow");
+    if (!wrap) return;
+    var COUNT = 48;
+    var SNOW_STYLES = [];
+
+    for (var i = 0; i < COUNT; i++) {
+      var sz    = 1.5 + Math.random() * 4.5;
+      var op    = 0.25 + Math.random() * 0.6;
+      var dur   = 8 + Math.random() * 12;       /* 8~20s，慢飘 */
+      var delay = -(Math.random() * (dur + 6));
+      var x     = Math.random() * 100;
+      var name  = "p2sf_" + i;
+
+      /* 每片雪花独立左右漂移路径 */
+      var amp   = 12 + Math.random() * 40;
+      var freq  = 0.3 + Math.random() * 0.7;
+      var kf    = "0%{transform:translateX(0) translateY(-14px)}" +
+                  "25%{transform:translateX(" + (amp * 0.6).toFixed(1) + "px) translateY(26vh)}" +
+                  "50%{transform:translateX(" + (-amp * 0.3).toFixed(1) + "px) translateY(50vh)}" +
+                  "75%{transform:translateX(" + (amp * 0.8).toFixed(1) + "px) translateY(76vh)}" +
+                  "100%{transform:translateX(" + (amp * 0.1).toFixed(1) + "px) translateY(104vh)}";
+      var s = document.createElement("style");
+      s.textContent = "@keyframes " + name + "{" + kf + "}";
+      document.head.appendChild(s);
+
+      var el = document.createElement("div");
+      el.className = "p2-snowflake";
+      el.style.cssText =
+        "width:" + sz + "px;height:" + sz + "px;" +
+        "left:" + x.toFixed(1) + "%;" +
+        "opacity:" + op.toFixed(2) + ";" +
+        "background:rgba(255,255,255," + (op * 0.9).toFixed(2) + ");" +
+        "animation-name:" + name + ";" +
+        "animation-duration:" + dur.toFixed(1) + "s;" +
+        "animation-delay:" + delay.toFixed(1) + "s;" +
+        "animation-timing-function:linear;" +
+        "animation-iteration-count:infinite;";
+      wrap.appendChild(el);
+    }
+  })();
+
+  /* ── 3. 亮晶晶星尘 ── */
+  (function () {
+    var container = document.getElementById("p2Sparkles");
+    if (!container) return;
+    var N = 32;
+    for (var i = 0; i < N; i++) {
+      var el = document.createElement("span");
+      el.className = "p2-star";
+      var sz  = 4 + Math.random() * 12;
+      var x   = Math.random() * 96;
+      var y   = Math.random() * 92;
+      var dur = 1.6 + Math.random() * 3.4;
+      var del = -(Math.random() * (dur + 2.5));
+      el.style.cssText =
+        "width:" + sz + "px;height:" + sz + "px;" +
+        "left:" + x.toFixed(1) + "%;top:" + y.toFixed(1) + "%;" +
+        "--dur:" + dur.toFixed(1) + "s;--del:" + del.toFixed(1) + "s;" +
+        "animation-duration:" + dur.toFixed(1) + "s;animation-delay:" + del.toFixed(1) + "s;";
+      container.appendChild(el);
+    }
   })();
 
 })();
