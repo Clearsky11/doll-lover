@@ -6,7 +6,7 @@
 <title>辛擎 · Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
 <style>
 /* ═══════════════════════════════════════════
    TOKENS
@@ -183,8 +183,8 @@ body::before {
 
 .sec-eyebrow {
   font-family: var(--f-mono);
-  font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
-  color: var(--ink-5);
+  font-size: 0.75rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ink-3);
   display: flex; align-items: center; gap: 0.75rem;
   margin-bottom: 0.6rem;
 }
@@ -921,8 +921,9 @@ body::before {
   font-family: var(--f-mono);
   font-size: clamp(5rem, 12vw, 9rem);
   font-weight: 300; font-style: normal;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(0,0,0,0.1);
+  color: #0e0e0e;
+  -webkit-text-stroke: 0.5px rgba(0,0,0,0.18);
+  paint-order: stroke fill;
   line-height: 1; user-select: none;
   display: block; letter-spacing: 0.04em;
 }
@@ -945,8 +946,8 @@ body::before {
   width: 1px;
   background: linear-gradient(to bottom,
     transparent 0%,
-    rgba(0,0,0,0.1) 8%,
-    rgba(0,0,0,0.1) 92%,
+    rgba(0,0,0,0.25) 8%,
+    rgba(0,0,0,0.25) 92%,
     transparent 100%
   );
 }
@@ -984,23 +985,23 @@ body::before {
 
 .menu-item-left { display: flex; flex-direction: column; gap: 0.2rem; }
 .menu-item-num {
-  font-family: var(--f-mono); font-size: 0.7rem;
-  letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-5);
+  font-family: var(--f-mono); font-size: 0.8rem;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-3);
 }
 .menu-item-title {
-  font-family: var(--f-kr); font-size: 1.1rem; font-weight: 500;
+  font-family: var(--f-kr); font-size: 1.35rem; font-weight: 500;
   color: var(--ink);
   transition: color 0.2s;
 }
 .menu-item:hover .menu-item-title { color: var(--ink); }
 .menu-item-en {
-  font-family: var(--f-mono); font-size: 0.68rem; font-weight: 300; font-style: normal;
+  font-family: var(--f-mono); font-size: 0.78rem; font-weight: 400; font-style: normal;
   letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--ink-5);
+  color: var(--ink-3);
 }
 .menu-item-arrow {
-  font-family: var(--f-mono); font-size: 0.7rem;
-  color: var(--ink-5);
+  font-family: var(--f-mono); font-size: 0.8rem;
+  color: var(--ink-3);
   transition: color 0.2s, transform 0.3s var(--ease);
   flex-shrink: 0;
 }
@@ -1140,50 +1141,173 @@ body::before {
   max-width: 900px;
   position: relative;
   padding-left: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-/* 每条经历 */
+/* 实习卡片 — 左右分栏 */
 .exp-entry {
   position: relative;
-  padding: 0 0 3.5rem 0;
-  border-bottom: 1px solid rgba(0,0,0,0.07);
-  margin-bottom: 3.5rem;
-  /* 档案格子纸背景 */
-  background-image:
-    linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.015) 1px, transparent 1px);
-  background-size: 100% 2.4rem, 2.4rem 100%;
-  background-position: 0 0.6rem, 0 0;
-  border-radius: 2px;
-  padding: 1.2rem 1.2rem 3.5rem 1.2rem;
+  display: flex;
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
-.exp-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 1.2rem; }
 
-/* 左侧编号 */
-.exp-entry-num {
-  position: absolute; left: -4.5rem; top: 0.1rem;
-  font-family: var(--f-mono); font-size: 0.68rem;
-  letter-spacing: 0.18em; color: var(--ink-5);
+/* 侧边编号栏 */
+.exp-sidebar {
+  width: 3.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 1rem;
+  flex-shrink: 0;
+  position: relative;
+}
+.exp-sidebar::after {
+  content: "";
+  position: absolute;
+  right: 0; top: 8%; bottom: 8%;
+  width: 1px;
+  background: rgba(0,0,0,0.08);
+}
+
+/* 大号编号 */
+.exp-big-num {
+  display: block;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 3.2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  line-height: 1;
   user-select: none;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    text-shadow 0.25s ease,
+    filter 0.25s ease;
+}
+.exp-entry:hover .exp-big-num {
+  transform: translateY(-6px) scale(1.05);
+  filter: brightness(1.15);
+}
+.exp-entry.d1 .exp-big-num { color: #c47070; }
+.exp-entry.d2 .exp-big-num { color: #7090c4; }
+.exp-entry.d3 .exp-big-num { color: #70c49a; }
+
+/* 右侧内容 */
+.exp-body {
+  flex: 1;
+  padding: 1.1rem 1.2rem 0.8rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+.exp-entry.d1 .exp-body { background-color: #fdf9f9; }
+.exp-entry.d2 .exp-body { background-color: #f9fafd; }
+.exp-entry.d3 .exp-body { background-color: #f9fdfb; }
+
+/* 折叠区域 — 默认收起 */
+.exp-fold {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition:
+    max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s ease;
+  cursor: default;
+}
+.exp-entry:hover .exp-fold {
+  max-height: 800px;
+  opacity: 1;
 }
 
-/* 标题行：公司 + 职位 + 时间 */
-.exp-entry-head {
-  display: flex; align-items: center; gap: 1.2rem;
-  margin-bottom: 0.3rem; flex-wrap: wrap;
-}
-.exp-entry-company {
-  font-family: var(--f-kr); font-size: 1.05rem; font-weight: 500;
-  color: var(--ink); line-height: 1.3;
+/* 展开提示箭头 */
+.exp-fold-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--f-mono); font-size: 0.68rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--ink-4);
+  margin-top: 0.4rem;
   transition: color 0.2s;
 }
-.exp-entry-role {
-  font-family: var(--f-kr); font-size: 0.82rem; font-weight: 300;
-  color: var(--ink-3);
+.exp-fold-hint::after {
+  content: "";
+  display: inline-block;
+  width: 12px; height: 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-size: contain;
+  transition: transform 0.3s ease;
 }
-.exp-entry-period {
-  font-family: var(--f-mono); font-size: 0.68rem; letter-spacing: 0.08em;
-  color: var(--ink-5); white-space: nowrap; margin-left: auto;
+.exp-entry:hover .exp-fold-hint::after {
+  transform: rotate(180deg);
+}
+.exp-entry:hover .exp-fold-hint { color: var(--ink-3); }
+
+/* 正文 */
+.exp-entry-body {
+  font-family: var(--f-kr); font-size: 0.88rem; font-weight: 300;
+  color: var(--ink-2); line-height: 2.2;
+  padding-top: 0.6rem;
+  border-top: 1px dashed rgba(0,0,0,0.08);
+}
+.exp-entry-body p { margin-bottom: 0.8rem; }
+.exp-entry-body p:last-child { margin-bottom: 0; }
+.exp-entry-body strong { font-weight: 500; color: var(--ink); }
+
+/* 荧光笔高亮 — 实习数据 */
+.exp-stat {
+  display: inline-block;
+  font-family: var(--f-mono); font-size: 0.88rem; font-weight: 600;
+  color: var(--ink);
+  position: relative;
+  line-height: 1.4;
+  vertical-align: baseline;
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    text-shadow 0.2s ease,
+    filter 0.2s ease;
+  cursor: default;
+}
+/* 粗直荧光底 */
+.exp-stat::before {
+  content: "";
+  position: absolute;
+  left: -2px; right: -2px;
+  top: 15%; bottom: 10%;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(255, 220, 80, 0.5) 25%,
+    rgba(255, 220, 80, 0.55) 70%,
+    transparent 100%
+  );
+  border-radius: 1px;
+  z-index: -1;
+  transition: transform 0.2s ease;
+}
+/* 波浪线 */
+.exp-stat::after {
+  content: "";
+  position: absolute;
+  left: -3px; right: -3px;
+  bottom: -4px;
+  height: 9px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='9'%3E%3Cpath d='M0 6 Q4.5 0.5 9 6 Q13.5 11.5 18 6' stroke='%23e8b840' stroke-width='3.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 18px 9px;
+  z-index: 0;
+  transition: transform 0.2s ease;
+}
+.exp-stat:hover {
+  transform: translateY(-2px);
+  text-shadow: 0 3px 8px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.12);
+  filter: brightness(1.08);
+}
+.exp-stat:hover::after {
+  transform: translateY(-4px) scaleY(1.5);
 }
 
 /* 机密等级条 */
@@ -1227,11 +1351,11 @@ body::before {
 /* 正文 */
 .exp-entry-body {
   font-family: var(--f-kr); font-size: 0.88rem; font-weight: 300;
-  color: var(--ink-2); line-height: 2.05;
+  color: var(--ink-2); line-height: 2.2;
   padding-top: 0.6rem;
   border-top: 1px dashed rgba(0,0,0,0.08);
 }
-.exp-entry-body p { margin-bottom: 0.9rem; }
+.exp-entry-body p { margin-bottom: 0.8rem; }
 .exp-entry-body p:last-child { margin-bottom: 0; }
 .exp-entry-body strong { font-weight: 500; color: var(--ink); }
 
@@ -1277,20 +1401,190 @@ body::before {
   padding-left: 5rem;
 }
 
-/* 每个项目 */
+/* 每个项目容器 */
+.proj-doc {
+  max-width: 900px;
+  position: relative;
+  padding-left: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* 项目卡片 — 左右分栏 */
 .proj-entry {
   position: relative;
-  padding: 1.2rem 1.2rem 4rem 1.2rem;
-  border-bottom: 1px solid rgba(0,0,0,0.07);
-  margin-bottom: 4rem;
-  background-image:
-    linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.015) 1px, transparent 1px);
-  background-size: 100% 2.4rem, 2.4rem 100%;
-  background-position: 0 0.6rem, 0 0;
-  border-radius: 2px;
+  display: flex;
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
-.proj-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 1.2rem; }
+.proj-entry:last-child { }
+
+/* 大号像素风编号 — 竖排卡片最顶部 */
+.proj-sidebar {
+  width: 3.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 1rem;
+  flex-shrink: 0;
+  position: relative;
+}
+.proj-sidebar::after {
+  content: "";
+  position: absolute;
+  right: 0; top: 8%; bottom: 8%;
+  width: 1px;
+  background: rgba(0,0,0,0.08);
+}
+
+.proj-big-num {
+  display: block;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 3.2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  line-height: 1;
+  user-select: none;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    text-shadow 0.25s ease,
+    filter 0.25s ease;
+}
+.proj-entry:hover .proj-big-num {
+  transform: translateY(-6px) scale(1.05);
+  filter: brightness(1.15);
+}
+.proj-entry.d1 .proj-big-num { color: #c47070; }
+.proj-entry.d2 .proj-big-num { color: #7090c4; }
+.proj-entry.d3 .proj-big-num { color: #70c49a; }
+
+/* 右侧内容区 */
+.proj-body {
+  flex: 1;
+  padding: 1.2rem 1.2rem 1.5rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+/* 项目卡片底色 — 放在内容区背景 */
+.proj-entry.d1 .proj-body { background-color: #f7f5f3; }
+.proj-entry.d2 .proj-body { background-color: #f3f5f7; }
+.proj-entry.d3 .proj-body { background-color: #f5f7f3; }
+
+/* 荧光波浪笔 — 数据指标（暖黄粗直线 + 金黄波浪） */
+.proj-stat {
+  display: inline-block;
+  font-family: var(--f-mono); font-size: 0.88rem; font-weight: 600;
+  color: var(--ink);
+  margin: 0 0.1em;
+  position: relative;
+  line-height: 1.4;
+  vertical-align: baseline;
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    text-shadow 0.2s ease,
+    filter 0.2s ease;
+  cursor: default;
+}
+/* 粗直荧光笔 — 暖黄底色，衬在文字下方 */
+.proj-stat::before {
+  content: "";
+  position: absolute;
+  left: -2px; right: -2px;
+  top: 15%; bottom: 10%;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(255, 220, 80, 0.5) 25%,
+    rgba(255, 220, 80, 0.55) 70%,
+    transparent 100%
+  );
+  border-radius: 1px;
+  z-index: -1;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+/* 粗波浪底色 — 金黄 */
+.proj-stat::after {
+  content: "";
+  position: absolute;
+  left: -3px; right: -3px;
+  bottom: -4px;
+  height: 9px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='9'%3E%3Cpath d='M0 6 Q4.5 0.5 9 6 Q13.5 11.5 18 6' stroke='%23e8b840' stroke-width='3.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 18px 9px;
+  z-index: 0;
+  transition: transform 0.2s ease, bottom 0.2s ease;
+}
+.proj-stat:hover {
+  transform: translateY(-2px);
+  text-shadow: 0 3px 8px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.12);
+  filter: brightness(1.08);
+}
+.proj-stat:hover::after {
+  transform: translateY(-4px) scaleY(1.5);
+  bottom: -5px;
+}
+
+/* 荧光波浪笔 — 关键词（蓝绿双线 + 蓝绿波浪） */
+.proj-wavy {
+  display: inline-block;
+  font-weight: 500;
+  color: var(--ink-2);
+  position: relative;
+  line-height: 1.4;
+  vertical-align: baseline;
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    text-shadow 0.2s ease,
+    filter 0.2s ease;
+  cursor: default;
+}
+/* 蓝绿直荧光底色 */
+.proj-wavy::before {
+  content: "";
+  position: absolute;
+  left: -2px; right: -2px;
+  top: 15%; bottom: 10%;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(120, 170, 210, 0.4) 25%,
+    rgba(100, 195, 150, 0.4) 70%,
+    transparent 100%
+  );
+  border-radius: 1px;
+  z-index: -1;
+  transition: transform 0.2s ease;
+}
+/* 蓝绿双层波浪 */
+.proj-wavy::after {
+  content: "";
+  position: absolute;
+  left: -3px; right: -3px;
+  bottom: -4px;
+  height: 9px;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9'%3E%3Cpath d='M0 5.5 Q4 0.5 8 5.5 Q12 10.5 16 5.5' stroke='%238ab4d4' stroke-width='2.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='6'%3E%3Cpath d='M0 3 Q4 0 8 3 Q12 6 16 3' stroke='%2368c4a0' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 16px 9px, 16px 6px;
+  background-position: 0 0, 0 2px;
+  z-index: 0;
+  transition: transform 0.2s ease, bottom 0.2s ease;
+}
+.proj-wavy:hover {
+  transform: translateY(-2px);
+  text-shadow: 0 3px 8px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.12);
+  filter: brightness(1.08);
+}
+.proj-wavy:hover::after {
+  transform: translateY(-4px) scaleY(1.5);
+  bottom: -5px;
+}
 
 /* 项目编号 — 绝对定位在左侧 */
 .proj-entry-num {
@@ -1339,21 +1633,13 @@ body::before {
 /* 正文段落 */
 .proj-entry-body {
   font-family: var(--f-kr); font-size: 0.88rem; font-weight: 300;
-  color: var(--ink-2); line-height: 2.05;
+  color: var(--ink-2); line-height: 2.4;
   padding-top: 0.6rem;
   border-top: 1px dashed rgba(0,0,0,0.08);
 }
 .proj-entry-body p { margin-bottom: 0.9rem; }
 .proj-entry-body p:last-child { margin-bottom: 0; }
 .proj-entry-body strong { font-weight: 500; color: var(--ink); }
-
-/* 数据行 — 内联高亮数字 */
-.proj-stat {
-  display: inline-block;
-  font-family: var(--f-mono); font-size: 0.78rem; font-weight: 500;
-  color: var(--ink); letter-spacing: 0.04em;
-  margin: 0 0.1em;
-}
 
 /* 结果摘要行 */
 .proj-entry-results {
@@ -2043,10 +2329,12 @@ footer {
   .hero-right { display: none; }
   .menu-layout { grid-template-columns: 1fr; gap: 3rem; }
   .exp-doc { padding-left: 0; }
-  .exp-entry-num { display: none; }
+  .exp-big-num { display: none; }
+  .exp-sidebar { width: 2rem; }
   .contact-grid { grid-template-columns: 1fr; }
-  .proj-entry-num { display: none; }
-  .proj-doc { padding-left: 0; }
+  .proj-big-num { display: none; }
+  .proj-sidebar { width: 2rem; }
+  .proj-doc { padding-left: 2.5rem; }
 }
 @media (max-width: 600px) {
   .section { padding: 6rem 5vw 4rem; }
@@ -2541,140 +2829,135 @@ footer {
 
       <!-- 项目 01：Doll-Lover App -->
       <div class="proj-entry reveal d1">
-        <div class="proj-entry-num">01</div>
-        <div class="entry-side-tag" aria-hidden="true">
-          <div class="est-label">UNI-APP</div>
-          <div class="est-line"></div>
-        </div>
-        <div class="entry-status-badge active">IN DEV</div>
-        <div class="proj-entry-head">
-          <span class="proj-entry-title">Doll-Lover 衣橱管理 App</span>
-          <span class="proj-entry-meta">独立全栈开发 · 2026 — 开发中</span>
-        </div>
-        <div class="exp-classify-bar">
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot"></div>
-          <div class="exp-classify-dot"></div>
-          <span class="exp-classify-label">PRIORITY · B-RANK · IN DEV</span>
-        </div>
-        <div class="proj-entry-kw">
-          <span class="proj-kw">uni-app</span>
-          <span class="proj-kw">uniCloud</span>
-          <span class="proj-kw">全栈独立</span>
-          <span class="proj-kw">BJD 娃圈</span>
-          <span class="proj-kw">跨平台</span>
-        </div>
-        <div class="proj-entry-body">
-          <p><strong>背景</strong>：BJD 娃娃玩家通常拥有多个娃娃和大量娃物娃服，手动管理衣橱搭配与开销费时费力。开发 Doll-Lover App，解决跨娃搭配记录、资金管理和物品查找等高频痛点，为娃圈玩家提供一站式管理工具。</p>
-        </div>
-
-        <!-- ── 产品展示区 ── -->
-        <div class="dl-showcase">
-          <!-- 左：手机框，内含4个视频层叠，JS 控制显示哪个 -->
-          <div class="dl-phone-frame">
-            <div class="dl-phone-shell" id="dl-phone">
-              <!-- vid-0: 更换搭配（默认激活） -->
-              <video class="dl-phone-video dl-vid-active" id="dl-vid-0"
-                src="shipin/change.mp4"
-                muted loop playsinline preload="auto"></video>
-              <!-- vid-1: 资金记账 -->
-              <video class="dl-phone-video" id="dl-vid-1"
-                src="shipin/manage.mp4"
-                muted loop playsinline preload="metadata"></video>
-              <!-- vid-2: 长按预览 -->
-              <video class="dl-phone-video" id="dl-vid-2"
-                src="shipin/preview.mp4"
-                muted loop playsinline preload="metadata"></video>
-              <!-- vid-3: 玩娃运势 -->
-              <video class="dl-phone-video" id="dl-vid-3"
-                src="shipin/luck.mp4"
-                muted loop playsinline preload="metadata"></video>
-            </div>
+        <div class="proj-sidebar"><div class="proj-big-num">01</div></div>
+        <div class="proj-body">
+          <div class="entry-side-tag" aria-hidden="true">
+            <div class="est-label">UNI-APP</div>
+            <div class="est-line"></div>
+          </div>
+          <div class="entry-status-badge active">IN DEV</div>
+          <div class="proj-entry-head">
+            <span class="proj-entry-title">Doll-Lover 衣橱管理 App</span>
+            <span class="proj-entry-meta">独立全栈开发 · 2026 — 开发中</span>
+          </div>
+          <div class="exp-classify-bar">
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot"></div>
+            <div class="exp-classify-dot"></div>
+            <span class="exp-classify-label">PRIORITY · B-RANK · IN DEV</span>
+          </div>
+          <div class="proj-entry-kw">
+            <span class="proj-kw">uni-app</span>
+            <span class="proj-kw">uniCloud</span>
+            <span class="proj-kw">全栈独立</span>
+            <span class="proj-kw">BJD 娃圈</span>
+            <span class="proj-kw">跨平台</span>
+          </div>
+          <div class="proj-entry-body">
+            <p><strong>背景</strong>：BJD 娃娃玩家通常拥有多个娃娃和大量娃物娃服，手动管理衣橱搭配与开销费时费力。开发 Doll-Lover App，解决<span class="proj-stat">跨娃搭配记录</span>、<span class="proj-stat">资金管理</span>和<span class="proj-stat">物品查找</span>等高频痛点，为娃圈玩家提供一站式管理工具。</p>
           </div>
 
-          <!-- 右：功能亮点列表，hover 切换对应视频 -->
-          <div class="dl-features" id="dl-features">
-            <div class="dl-feature-item dl-active" data-vid="0">
-              <span class="dl-feature-icon">DRAG</span>
-              <span class="dl-feature-text"><strong>长按拖拽搭配</strong> — 长按物品卡片拖至其他娃娃头像，一键完成跨娃搭配转移，震动反馈，iOS 原生体验。</span>
+          <!-- ── 产品展示区 ── -->
+          <div class="dl-showcase">
+            <div class="dl-phone-frame">
+              <div class="dl-phone-shell" id="dl-phone">
+                <video class="dl-phone-video dl-vid-active" id="dl-vid-0"
+                  src="shipin/change.mp4"
+                  muted loop playsinline preload="auto"></video>
+                <video class="dl-phone-video" id="dl-vid-1"
+                  src="shipin/manage.mp4"
+                  muted loop playsinline preload="metadata"></video>
+                <video class="dl-phone-video" id="dl-vid-2"
+                  src="shipin/preview.mp4"
+                  muted loop playsinline preload="metadata"></video>
+                <video class="dl-phone-video" id="dl-vid-3"
+                  src="shipin/luck.mp4"
+                  muted loop playsinline preload="metadata"></video>
+              </div>
             </div>
-            <div class="dl-feature-item" data-vid="1">
-              <span class="dl-feature-icon">FUND</span>
-              <span class="dl-feature-text"><strong>玩娃资金记账</strong> — 独立资金模块，右滑一键标记结算，支出分类统计，帮助玩家掌握"坑深"。</span>
-            </div>
-            <div class="dl-feature-item" data-vid="2">
-              <span class="dl-feature-icon">PREVIEW</span>
-              <span class="dl-feature-text"><strong>长按大图预览</strong> — 账本列表长按任意物品，立即弹出大图卡片，名称、金额、操作提示一目了然。</span>
-            </div>
-            <div class="dl-feature-item" data-vid="3">
-              <span class="dl-feature-icon">FORTUNE</span>
-              <span class="dl-feature-text"><strong>今日玩娃运势</strong> — 点击右上角抽签筒，随机抽取今日运势，是大吉还是小凶，每天都有小惊喜。</span>
+            <div class="dl-features" id="dl-features">
+              <div class="dl-feature-item dl-active" data-vid="0">
+                <span class="dl-feature-icon">DRAG</span>
+                <span class="dl-feature-text"><strong>长按拖拽搭配</strong> — 长按物品卡片拖至其他娃娃头像，一键完成跨娃搭配转移，震动反馈，iOS 原生体验。</span>
+              </div>
+              <div class="dl-feature-item" data-vid="1">
+                <span class="dl-feature-icon">FUND</span>
+                <span class="dl-feature-text"><strong>玩娃资金记账</strong> — 独立资金模块，右滑一键标记结算，支出分类统计，帮助玩家掌握"坑深"。</span>
+              </div>
+              <div class="dl-feature-item" data-vid="2">
+                <span class="dl-feature-icon">PREVIEW</span>
+                <span class="dl-feature-text"><strong>长按大图预览</strong> — 账本列表长按任意物品，立即弹出大图卡片，名称、金额、操作提示一目了然。</span>
+              </div>
+              <div class="dl-feature-item" data-vid="3">
+                <span class="dl-feature-icon">FORTUNE</span>
+                <span class="dl-feature-text"><strong>今日玩娃运势</strong> — 点击右上角抽签筒，随机抽取今日运势，是大吉还是小凶，每天都有小惊喜。</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- 数据摘要 + APK -->
-        <div class="proj-entry-results" style="margin-top:1.4rem">
-          <div class="proj-result-item">
-            <span class="proj-result-num">全栈</span>
-            <span class="proj-result-label">独立开发</span>
+          <!-- 数据摘要 + APK -->
+          <div class="proj-entry-results" style="margin-top:1.4rem">
+            <div class="proj-result-item">
+              <span class="proj-result-num">全栈</span>
+              <span class="proj-result-label">独立开发</span>
+            </div>
+            <div class="proj-result-item">
+              <span class="proj-result-num">3端</span>
+              <span class="proj-result-label">跨平台运行</span>
+            </div>
+            <div class="proj-result-item">
+              <span class="proj-result-num">4类</span>
+              <span class="proj-result-label">物品分类管理</span>
+            </div>
+            <div class="proj-result-item">
+              <span class="proj-result-num">APK</span>
+              <span class="proj-result-label">可下载体验</span>
+            </div>
           </div>
-          <div class="proj-result-item">
-            <span class="proj-result-num">3端</span>
-            <span class="proj-result-label">跨平台运行</span>
-          </div>
-          <div class="proj-result-item">
-            <span class="proj-result-num">4类</span>
-            <span class="proj-result-label">物品分类管理</span>
-          </div>
-          <div class="proj-result-item">
-            <span class="proj-result-num">APK</span>
-            <span class="proj-result-label">可下载体验</span>
-          </div>
+          <a class="proj-dl-link"
+             href="https://mp-2e01c505-e0f3-4e7d-9c00-839e9d13ee3d.cdn.bspapp.com/__UNI__4B21C7B__20260326024543.apk"
+             target="_blank" rel="noopener">
+            ↓ APK 下载体验
+          </a>
         </div>
-        <a class="proj-dl-link"
-           href="https://mp-2e01c505-e0f3-4e7d-9c00-839e9d13ee3d.cdn.bspapp.com/__UNI__4B21C7B__20260326024543.apk"
-           target="_blank" rel="noopener">
-          ↓ APK 下载体验
-        </a>
       </div>
 
       <!-- 项目 02：AR 校园导航 -->
-      <div class="proj-entry reveal d2" style="border-bottom:none;margin-bottom:0;padding-bottom:1.2rem">
-        <div class="proj-entry-num">02</div>
-        <div class="entry-side-tag" aria-hidden="true">
-          <div class="est-label">AR · APP</div>
-          <div class="est-line"></div>
-        </div>
-        <div class="entry-status-badge">COMPLETED</div>
-        <div class="proj-entry-head">
-          <span class="proj-entry-title">AR 校园导航应用</span>
-          <span class="proj-entry-meta">大创项目 · 总负责人 · 2024.5 — 2025.5</span>
-        </div>
-        <div class="exp-classify-bar">
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot"></div>
-          <span class="exp-classify-label">PRIORITY · A-RANK · COMPLETED</span>
-        </div>
-        <div class="proj-entry-kw">
-          <span class="proj-kw">Unity · AR</span>
-          <span class="proj-kw">用户研究</span>
-          <span class="proj-kw">100+ 问卷</span>
-          <span class="proj-kw">商业化测算</span>
-          <span class="proj-kw">总负责人</span>
-        </div>
-        <div class="proj-entry-body">
-            <p><strong>项目背景</strong>：面向上海理工大学学生群体，基于 Unity 设计并实现 AR 校园导航应用，旨在优化校园动线体验与信息获取效率。作为大学生创新创业训练计划（大创）项目，担任总负责人，统筹立项、研究、设计与开发全流程。</p>
-            <p><strong>用户研究</strong>：设计并发放 100+ 份问卷，结合校园内实地行为观察，搭建需求分析框架。通过聚类分析识别核心用户诉求为「地点标签 + 实时导航」，排除了「社交打卡」等次要需求，确保产品聚焦。</p>
-            <p><strong>产品设计</strong>：基于用户研究结论定义核心功能集与迭代优先级，主导 AR 交互方案设计，包括 AR 标注层的信息密度控制、导航路径可视化方案及多场景切换逻辑。</p>
-            <p><strong>商业化测算</strong>：系统评估多条变现路径，包括食堂 AR 菜单广告位、AR 校园纪念 VIP 礼包、校园商户 POI 推广等，完成各路径的收入规模估算与可行性分析，形成商业化方案报告。</p>
+      <div class="proj-entry reveal d2">
+        <div class="proj-sidebar"><div class="proj-big-num">02</div></div>
+        <div class="proj-body">
+          <div class="entry-side-tag" aria-hidden="true">
+            <div class="est-label">AR · APP</div>
+            <div class="est-line"></div>
           </div>
-          <!-- B站视频嵌入 -->
+          <div class="entry-status-badge">COMPLETED</div>
+          <div class="proj-entry-head">
+            <span class="proj-entry-title">AR 校园导航应用</span>
+            <span class="proj-entry-meta">大创项目 · 总负责人 · 2024.5 — 2025.5</span>
+          </div>
+          <div class="exp-classify-bar">
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot"></div>
+            <span class="exp-classify-label">PRIORITY · A-RANK · COMPLETED</span>
+          </div>
+          <div class="proj-entry-kw">
+            <span class="proj-kw">Unity · AR</span>
+            <span class="proj-kw">用户研究</span>
+            <span class="proj-kw">100+ 问卷</span>
+            <span class="proj-kw">商业化测算</span>
+            <span class="proj-kw">总负责人</span>
+          </div>
+          <div class="proj-entry-body">
+            <p><strong>项目背景</strong>：面向上海理工大学学生群体，基于 Unity 设计并实现 AR 校园导航应用，旨在优化校园动线体验与信息获取效率。作为大创项目，担任总负责人，统筹立项、研究、设计与开发全流程。</p>
+            <p><strong>用户研究</strong>：设计并发放 <span class="proj-stat">100+</span> 份问卷，结合实地行为观察，搭建需求分析框架。通过聚类分析识别核心诉求为<span class="proj-wavy">「地点标签 + 实时导航」</span>，排除了「社交打卡」等次要需求，确保产品聚焦。</p>
+            <p><strong>产品设计</strong>：定义核心功能集与迭代优先级，主导 AR 交互方案设计，包括标注层信息密度控制、导航路径可视化方案及多场景切换逻辑。</p>
+            <p><strong>商业化测算</strong>：系统评估多条变现路径，包括食堂 AR 菜单广告位、校园纪念 VIP 礼包、商户 POI 推广等，完成收入规模估算与可行性分析。</p>
+          </div>
           <div class="proj-video-wrap">
             <div class="proj-video-label">演示视频 · Demo</div>
             <div class="proj-video-ratio">
@@ -2704,38 +2987,55 @@ footer {
       </div>
 
       <!-- 项目 03：小红书 AI 工程提效审核 -->
-      <div class="proj-entry reveal d3" style="border-bottom:none;margin-bottom:0;padding-bottom:1.2rem">
-        <div class="proj-entry-num">03</div>
-        <div class="entry-side-tag" aria-hidden="true">
-          <div class="est-label">AI · NLP</div>
-          <div class="est-line"></div>
+      <div class="proj-entry reveal d3">
+        <div class="proj-sidebar"><div class="proj-big-num">03</div></div>
+        <div class="proj-body">
+          <div class="entry-side-tag" aria-hidden="true">
+            <div class="est-label">AI · NLP</div>
+            <div class="est-line"></div>
+          </div>
+          <div class="entry-status-badge">SHIPPED</div>
+          <div class="proj-entry-head">
+            <span class="proj-entry-title">小红书 AI 工程提效审核</span>
+            <span class="proj-entry-meta">XIAOHONGSHU · 2025.9 — 2025.11</span>
+          </div>
+          <div class="exp-classify-bar">
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <span class="exp-classify-label">PRIORITY · S-RANK · SHIPPED</span>
+          </div>
+          <div class="proj-entry-kw">
+            <span class="proj-kw">NLP</span>
+            <span class="proj-kw">Prompt Engineering</span>
+            <span class="proj-kw">分流机制</span>
+            <span class="proj-kw">风控策略</span>
+            <span class="proj-kw">主导</span>
+          </div>
+          <div class="proj-entry-body">
+            <p><strong>背景与问题</strong>：小红书商业化广告举报场景中，「质量/售后」类举报体量庞大，占用大量人工审核资源；而「假货」等高危场景因用户描述模糊，常被系统误判为低优先级，导致高风险响应延迟，平台信任度受损。</p>
+            <p><strong>AI 能力引入</strong>：主导引入 NLP 模型，精准设计 Prompt，将商品信息与举报描述作为联合输入，实现自动化分类。模型在测试集上准召率超 <span class="proj-stat">90%</span>，自动化处理率提升约 <span class="proj-stat">30%</span>。</p>
+            <p><strong>识别逻辑迭代</strong>：与算法团队共建假货词库与权重机制，增设<span class="proj-wavy">「高危投诉」标签</span>，使高危举报识别率提升约 <span class="proj-stat">20%</span>。</p>
+            <p><strong>分流机制设计</strong>：搭建「事前规则—事中识别—事后复盘」完整闭环，质量/售后类举报自动分流，高危场景保留人工并打标优先级，实现<span class="proj-stat">差异化处置</span>。</p>
+          </div>
+          <div class="proj-entry-results">
+            <div class="proj-result-item">
+              <span class="proj-result-num" data-count="90" data-suffix="%+">90%+</span>
+              <span class="proj-result-label">NLP 准召率</span>
+            </div>
+            <div class="proj-result-item">
+              <span class="proj-result-num" data-count="30" data-prefix="↑" data-suffix="%">↑30%</span>
+              <span class="proj-result-label">自动化处理率</span>
+            </div>
+            <div class="proj-result-item">
+              <span class="proj-result-num" data-count="20" data-prefix="↓" data-suffix="%">↓20%</span>
+              <span class="proj-result-label">风险指标</span>
+            </div>
+          </div>
         </div>
-        <div class="entry-status-badge">SHIPPED</div>
-        <div class="proj-entry-head">
-          <span class="proj-entry-title">小红书 AI 工程提效审核</span>
-          <span class="proj-entry-meta">XIAOHONGSHU · 2025.9 — 2025.11</span>
-        </div>
-        <div class="exp-classify-bar">
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <span class="exp-classify-label">PRIORITY · S-RANK · SHIPPED</span>
-        </div>
-        <div class="proj-entry-kw">
-          <span class="proj-kw">NLP</span>
-          <span class="proj-kw">Prompt Engineering</span>
-          <span class="proj-kw">分流机制</span>
-          <span class="proj-kw">风控策略</span>
-          <span class="proj-kw">主导</span>
-        </div>
-        <div class="proj-entry-body">
-          <p><strong>背景与问题</strong>：小红书商业化广告举报场景中，「质量/售后」类举报体量庞大，占用大量人工审核资源；而「假货」等高危场景因用户描述模糊、词汇多样，常被系统误判为低优先级，导致高风险响应严重延迟，平台信任度受损。</p>
-          <p><strong>AI 能力引入</strong>：主导引入 NLP 模型，精准设计 Prompt，将商品信息与用户举报描述作为联合输入，实现举报诉求的自动化分类。模型在测试集上准召率超 90%，显著优于规则系统。自动化处理率提升约 30%，大幅降低人工审核成本。</p>
-          <p><strong>识别逻辑迭代</strong>：与算法团队共建假货词库与权重机制，增设「高危投诉」标签，提升敏感场景识别灵敏度，使高危举报的识别率提升约 20%。</p>
-          <p><strong>分流机制设计</strong>：搭建「事前规则—事中识别—事后复盘」完整闭环。质量/售后类举报自动分流至客服通道，高危场景保留人工审核并打标优先级，实现差异化处置。复盘机制定期输出误判分析，持续驱动模型与规则迭代。</p>
-        </div>
+      </div>
         <div class="proj-entry-results">
           <div class="proj-result-item">
             <span class="proj-result-num" data-count="90" data-suffix="%+">90%+</span>
@@ -2751,6 +3051,8 @@ footer {
           </div>
         </div>
       </div>
+
+    </div>
   </div>
 </section>
 
@@ -2772,131 +3074,111 @@ footer {
 
       <!-- 美团 -->
       <div class="exp-entry reveal d1">
-        <div class="exp-entry-num">01</div>
-        <div class="entry-side-tag" aria-hidden="true">
-          <div class="est-label">MEITUAN</div>
-          <div class="est-line"></div>
-        </div>
-        <div class="entry-status-badge active">CURRENT</div>
-        <div class="exp-entry-head">
-          <span class="exp-entry-company">美团</span>
-          <span class="exp-entry-role">产品经理 · 生态体验</span>
-          <span class="exp-entry-period">2025.12 — 至今 · 上海</span>
-        </div>
-        <div class="exp-classify-bar">
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot"></div>
-          <span class="exp-classify-label">CLEARANCE · LV4 · ACTIVE</span>
-        </div>
-        <div class="exp-entry-kw">
-          <span class="exp-kw">策略优化</span>
-          <span class="exp-kw">用户反馈漏斗</span>
-          <span class="exp-kw">商家自助率提升</span>
-        </div>
-        <div class="exp-entry-body">
-          <p><strong>沟通功能优化</strong>：调整商家策略，推动成功发起沟通量减少 1/3；为沉默用户设计轻量级反馈入口。</p>
-          <p><strong>评价处置触达设计</strong>：搭建全链路埋点漏斗，转化率由 10%→50%；分析 300+ 条音频，主动修复处置误判。</p>
-          <p><strong>报备功能优化</strong>：通过 SQL 取数与音频分析诊断痛点，优化报备流程，大幅提升商家自助解决率。</p>
+        <div class="exp-sidebar"><div class="exp-big-num">01</div></div>
+        <div class="exp-body">
+          <div class="entry-side-tag" aria-hidden="true">
+            <div class="est-label">MEITUAN</div>
+            <div class="est-line"></div>
+          </div>
+          <div class="entry-status-badge active">CURRENT</div>
+          <div class="exp-entry-head">
+            <span class="exp-entry-company">美团</span>
+            <span class="exp-entry-role">产品经理 · 生态体验</span>
+            <span class="exp-entry-period">2026.1 — 2026.4 · 上海</span>
+          </div>
+          <div class="exp-classify-bar">
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot"></div>
+            <span class="exp-classify-label">CLEARANCE · LV4 · ACTIVE</span>
+          </div>
+          <div class="exp-entry-kw">
+            <span class="exp-kw">策略优化</span>
+            <span class="exp-kw">用户反馈漏斗</span>
+            <span class="exp-kw">商家自助率提升</span>
+          </div>
+          <!-- 折叠内容：鼠标放上来展开 -->
+          <div class="exp-fold">
+            <div class="exp-entry-body">
+              <p><strong>沟通功能优化</strong>：调整商家策略，推动成功发起沟通量减少 <span class="exp-stat">1/3</span>；为沉默用户设计轻量级反馈入口。</p>
+              <p><strong>评价处置触达设计</strong>：搭建全链路埋点漏斗，转化率由 <span class="exp-stat">10%→50%</span>；分析 <span class="exp-stat">300+</span> 条音频，主动修复处置误判。</p>
+              <p><strong>报备功能优化</strong>：通过 SQL 取数与音频分析诊断痛点，优化报备流程，大幅提升商家自助解决率。</p>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- 小红书 -->
       <div class="exp-entry reveal d2">
-        <div class="exp-entry-num">02</div>
-        <div class="entry-side-tag" aria-hidden="true">
-          <div class="est-label">XHS</div>
-          <div class="est-line"></div>
-        </div>
-        <div class="entry-status-badge">COMPLETED</div>
-        <div class="exp-entry-head">
-          <span class="exp-entry-company">小红书</span>
-          <span class="exp-entry-role">产品经理 · 风控&amp;内容安全</span>
-          <span class="exp-entry-period">2025.9 — 2025.12 · 北京</span>
-        </div>
-        <div class="exp-classify-bar">
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot"></div>
-          <div class="exp-classify-dot"></div>
-          <span class="exp-classify-label">CLEARANCE · LV3 · COMPLETED</span>
-        </div>
-        <div class="exp-entry-kw">
-          <span class="exp-kw">黑产治理</span>
-          <span class="exp-kw">策略上线</span>
-          <span class="exp-kw">预售时长监控</span>
-        </div>
-        <div class="exp-entry-body">
-          <p><strong>直播举报治理</strong>：设计上线「价格区间必填」规则，次周直播间举报量下降 30%，审核时长缩短 40%。</p>
-          <p><strong>新型导流与欺诈治理</strong>：聚类分析 100+ 条音频输出风险报告；针对空包欺诈，推动「预售时长监控」上线，投诉量下降 75%。</p>
+        <div class="exp-sidebar"><div class="exp-big-num">02</div></div>
+        <div class="exp-body">
+          <div class="entry-side-tag" aria-hidden="true">
+            <div class="est-label">XHS</div>
+            <div class="est-line"></div>
+          </div>
+          <div class="entry-status-badge">COMPLETED</div>
+          <div class="exp-entry-head">
+            <span class="exp-entry-company">小红书</span>
+            <span class="exp-entry-role">产品经理 · 风控&amp;内容安全</span>
+            <span class="exp-entry-period">2025.8 — 2025.12 · 北京</span>
+          </div>
+          <div class="exp-classify-bar">
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot"></div>
+            <div class="exp-classify-dot"></div>
+            <span class="exp-classify-label">CLEARANCE · LV3 · COMPLETED</span>
+          </div>
+          <div class="exp-entry-kw">
+            <span class="exp-kw">黑产治理</span>
+            <span class="exp-kw">策略上线</span>
+            <span class="exp-kw">预售时长监控</span>
+          </div>
+          <div class="exp-fold">
+            <div class="exp-entry-body">
+              <p><strong>直播举报治理</strong>：设计上线「价格区间必填」规则，次周直播间举报量下降 <span class="exp-stat">30%</span>，审核时长缩短 <span class="exp-stat">40%</span>。</p>
+              <p><strong>新型导流与欺诈治理</strong>：聚类分析 <span class="exp-stat">100+</span> 条音频输出风险报告；针对空包欺诈，推动「预售时长监控」上线，投诉量下降 <span class="exp-stat">75%</span>。</p>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- 爱回收 -->
       <div class="exp-entry reveal d3">
-        <div class="exp-entry-num">03</div>
-        <div class="entry-side-tag" aria-hidden="true">
-          <div class="est-label">AIHUISHOU</div>
-          <div class="est-line"></div>
-        </div>
-        <div class="entry-status-badge">COMPLETED</div>
-        <div class="exp-entry-head">
-          <span class="exp-entry-company">爱回收</span>
-          <span class="exp-entry-role">产品经理 · 数据产品&amp;商业增长</span>
-          <span class="exp-entry-period">2025.5 — 2025.9 · 上海</span>
-        </div>
-        <div class="exp-classify-bar">
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot"></div>
-          <div class="exp-classify-dot"></div>
-          <span class="exp-classify-label">CLEARANCE · LV3 · COMPLETED</span>
-        </div>
-        <div class="exp-entry-kw">
-          <span class="exp-kw">活动裂变</span>
-          <span class="exp-kw">用户价值模型</span>
-          <span class="exp-kw">数据看板</span>
-        </div>
-        <div class="exp-entry-body">
-          <p><strong>产品设计与裂变</strong>：主导「爱分类 3.0」活动策划，负责限时加价与裂变拉新，用户复投转化率提升 20%。</p>
-          <p><strong>产品优化与模型预测</strong>：优化用户价值模型，新增入库单价特征，解决 20% 品类价值预测偏差问题，建立数据看板。</p>
-        </div>
-      </div>
-
-      <!-- 教育背景 -->
-      <div class="exp-entry reveal d4" style="border-bottom:none;margin-bottom:0;padding-bottom:1.2rem">
-        <div class="exp-entry-num">EDU</div>
-        <div class="entry-side-tag" aria-hidden="true">
-          <div class="est-label">USST</div>
-          <div class="est-line"></div>
-        </div>
-        <div class="entry-status-badge">2022—2026</div>
-        <div class="exp-entry-head">
-          <span class="exp-entry-company">上海理工大学</span>
-          <span class="exp-entry-role">数学与应用数学 · 本科</span>
-          <span class="exp-entry-period">2022 — 2026 · 上海</span>
-        </div>
-        <div class="exp-classify-bar">
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot"></div>
-          <div class="exp-classify-dot"></div>
-          <div class="exp-classify-dot"></div>
-          <span class="exp-classify-label">CLEARANCE · LV2 · EDUCATION</span>
-        </div>
-        <div class="exp-entry-kw">
-          <span class="exp-kw">大创项目负责人</span>
-          <span class="exp-kw">数学建模</span>
-          <span class="exp-kw">SQL · Python</span>
-          <span class="exp-kw">Figma</span>
-          <span class="exp-kw">uni-app</span>
-        </div>
-        <div class="exp-entry-body">
-          <p>主修数学与应用数学，具备扎实的数理基础与数据分析能力。担任大学生创新创业训练计划（大创）项目总负责人，主导 AR 校园导航应用的立项、研究与开发全流程。参与数学建模竞赛，培养了结构化问题拆解与定量分析能力。</p>
+        <div class="exp-sidebar"><div class="exp-big-num">03</div></div>
+        <div class="exp-body">
+          <div class="entry-side-tag" aria-hidden="true">
+            <div class="est-label">AIHUISHOU</div>
+            <div class="est-line"></div>
+          </div>
+          <div class="entry-status-badge">COMPLETED</div>
+          <div class="exp-entry-head">
+            <span class="exp-entry-company">爱回收</span>
+            <span class="exp-entry-role">产品经理 · 数据产品&amp;商业增长</span>
+            <span class="exp-entry-period">2025.7 — 2025.8 · 上海</span>
+          </div>
+          <div class="exp-classify-bar">
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot lit"></div>
+            <div class="exp-classify-dot"></div>
+            <div class="exp-classify-dot"></div>
+            <span class="exp-classify-label">CLEARANCE · LV3 · COMPLETED</span>
+          </div>
+          <div class="exp-entry-kw">
+            <span class="exp-kw">活动裂变</span>
+            <span class="exp-kw">用户价值模型</span>
+            <span class="exp-kw">数据看板</span>
+          </div>
+          <div class="exp-fold">
+            <div class="exp-entry-body">
+              <p><strong>产品设计与裂变</strong>：主导「爱分类 3.0」活动策划，负责限时加价与裂变拉新，用户复投转化率提升 <span class="exp-stat">20%</span>。</p>
+              <p><strong>产品优化与模型预测</strong>：优化用户价值模型，新增入库单价特征，解决 <span class="exp-stat">20%</span> 品类价值预测偏差问题，建立数据看板。</p>
+            </div>
+          </div>
         </div>
       </div>
 
