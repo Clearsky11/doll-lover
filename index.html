@@ -630,11 +630,11 @@ body::before {
   70%{border-radius:50% 50% 62% 38%/50% 38% 62% 50%}
 }
 .hero-photo {
-  width: 100%; aspect-ratio: 3/4;
-  object-fit: cover; object-position: top center;
+  width: 100%; aspect-ratio: 4/3;
+  object-fit: cover; object-position: center center;
   display: block;
   border-radius: 0;
-  filter: saturate(0.75) contrast(1.05);
+  filter: saturate(0.82) contrast(1.03);
   animation: none;
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
 }
@@ -1021,12 +1021,12 @@ body::before {
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--border);
 }
-.file-photos { display: flex; gap: 0.6rem; align-items: flex-end; flex-shrink: 0; }
+.file-photos { display: flex; gap: 0.6rem; align-items: center; flex-shrink: 0; }
 .file-photo {
-  width: 80px; height: 100px;
-  object-fit: cover; object-position: top center;
+  width: 120px; height: 80px;
+  object-fit: cover; object-position: center center;
   border-radius: 0;
-  filter: saturate(0.6) contrast(1.08);
+  filter: saturate(0.75) contrast(1.05);
   box-shadow: 0 2px 12px rgba(0,0,0,0.1);
 }
 .file-photo--2 {
@@ -1137,7 +1137,7 @@ body::before {
 
 /* 整体容器 */
 .exp-doc {
-  max-width: 720px;
+  max-width: 900px;
   position: relative;
   padding-left: 5rem;
 }
@@ -1272,7 +1272,7 @@ body::before {
 
 /* 整体容器：单列，最大宽度，左侧留出行号区 */
 .proj-doc {
-  max-width: 720px;
+  max-width: 900px;
   position: relative;
   padding-left: 5rem;
 }
@@ -2108,7 +2108,7 @@ footer {
 <header class="topbar" id="topbar">
   <div class="topbar-logo">
     <span class="topbar-logo-dot"></span>
-    辛擎 · Gyeong
+    辛擎 · Portfolio
   </div>
   <div class="topbar-sys" aria-hidden="true">
     <span class="topbar-sys-dot"></span>
@@ -2116,13 +2116,13 @@ footer {
     <span style="color:var(--ink-5);margin:0 3px">·</span>
     <span id="topbarTime">--:--</span>
   </div>
-  <nav>
+      <nav>
     <ul class="topbar-nav">
       <li><a href="#hero">Home</a></li>
       <li><a href="#menu">Index</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#internship">Work</a></li>
       <li><a href="#projects">Projects</a></li>
+      <li><a href="#internship">Work</a></li>
       <li><a href="#guestboard">Board</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -2214,7 +2214,7 @@ footer {
 
             <!-- 照片 -->
             <div class="hero-photo-wrap">
-              <img class="hero-photo" src="6_opt.webp" alt="辛擎" loading="eager"/>
+              <img class="hero-photo" src="geren_opt.webp" alt="辛擎" loading="eager"/>
               <!-- 干员档案交互层 -->
               <div class="file-scan-overlay" aria-hidden="true">
                 <div class="fso-clip">
@@ -2382,24 +2382,24 @@ footer {
             </a>
           </li>
           <li class="menu-item reveal d2">
-            <a class="menu-item-inner" href="#internship">
-              <div class="menu-item-left">
-                <span class="menu-item-num">02</span>
-                <span class="menu-item-title">实习经历</span>
-                <span class="menu-item-en">Internship</span>
-              </div>
-              <span class="menu-item-badge">ACTIVE</span>
-              <span class="menu-item-arrow">↗</span>
-            </a>
-          </li>
-          <li class="menu-item reveal d3">
             <a class="menu-item-inner" href="#projects">
               <div class="menu-item-left">
-                <span class="menu-item-num">03</span>
+                <span class="menu-item-num">02</span>
                 <span class="menu-item-title">项目经历</span>
                 <span class="menu-item-en">Projects</span>
               </div>
               <span class="menu-item-badge">3 FILES</span>
+              <span class="menu-item-arrow">↗</span>
+            </a>
+          </li>
+          <li class="menu-item reveal d3">
+            <a class="menu-item-inner" href="#internship">
+              <div class="menu-item-left">
+                <span class="menu-item-num">03</span>
+                <span class="menu-item-title">实习经历</span>
+                <span class="menu-item-en">Internship</span>
+              </div>
+              <span class="menu-item-badge">ACTIVE</span>
               <span class="menu-item-arrow">↗</span>
             </a>
           </li>
@@ -2468,7 +2468,7 @@ footer {
         <!-- 右上角分类标签 -->
         <div class="file-header-tag" aria-hidden="true">OPERATOR FILE</div>
         <div class="file-photos">
-          <img class="file-photo" src="6_opt.webp" alt="辛擎"/>
+          <img class="file-photo" src="geren_opt.webp" alt="辛擎"/>
           <img class="file-photo file-photo--2" src="shenghuo1_opt.webp" alt="生活照"/>
         </div>
         <div class="file-id-block">
@@ -2480,10 +2480,6 @@ footer {
 
       <!-- 档案字段 -->
       <div class="file-fields reveal d2">
-        <div class="file-field">
-          <span class="ff-key">代号</span>
-          <span class="ff-val">Gyeong</span>
-        </div>
         <div class="file-field">
           <span class="ff-key">出生年份</span>
           <span class="ff-val">2004</span>
@@ -2502,23 +2498,15 @@ footer {
         </div>
         <div class="file-field">
           <span class="ff-key">当前实习</span>
-          <span class="ff-val">美团 · 产品运营</span>
+          <span class="ff-val">美团 · 产品经理</span>
         </div>
         <div class="file-field">
           <span class="ff-key">求职方向</span>
           <span class="ff-val">产品经理 / 策略运营</span>
         </div>
-        <div class="file-field">
-          <span class="ff-key">兴趣</span>
-          <span class="ff-val">BJD 娃娃 · 乙游 · 克苏鲁 · 猫奴（可乐）</span>
-        </div>
-        <div class="file-field">
-          <span class="ff-key">小红书</span>
-          <span class="ff-val">@草莓等等</span>
-        </div>
         <div class="file-field file-field--remark">
           <span class="ff-key">备注</span>
-          <span class="ff-val">擅长用数据驱动决策，喜欢把复杂问题拆解清楚再动手，对产品逻辑和用户体验有持续的好奇心。审美偏日韩简约机能风。</span>
+          <span class="ff-val">擅长用数据驱动决策，喜欢把复杂问题拆解清楚再动手，对产品逻辑和用户体验有持续的好奇心。</span>
         </div>
       </div>
 
@@ -2535,289 +2523,34 @@ footer {
   </div>
 </section>
 
-<!-- §3 实习经历 -->
-<section id="internship" class="section" style="position:relative">
-  <!-- 右上角档案编号水印 -->
-  <div class="section-file-mark" aria-hidden="true">
-    <span>SECTION · 02</span>
-    <span>WORK · INTERNSHIP</span>
-    <span>ENTRIES · 03</span>
-  </div>
-
-  <div class="section-inner">
-    <div class="sec-eyebrow reveal">02 · Work</div>
-    <div class="sec-title reveal d1">实习经历</div>
-    <div class="sec-sub reveal d2">Internship Experience · 教育背景</div>
-
-    <div class="exp-doc">
-
-      <!-- 美团 -->
-      <div class="exp-entry reveal d1">
-        <div class="exp-entry-num">01</div>
-        <div class="entry-side-tag" aria-hidden="true">
-          <div class="est-label">MEITUAN</div>
-          <div class="est-line"></div>
-        </div>
-        <div class="entry-status-badge active">CURRENT</div>
-        <div class="exp-entry-head">
-          <span class="exp-entry-company">美团</span>
-          <span class="exp-entry-role">产品运营 · 用户生态体验</span>
-          <span class="exp-entry-period">2025.12 — 至今 · 上海</span>
-        </div>
-        <div class="exp-classify-bar">
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot"></div>
-          <span class="exp-classify-label">CLEARANCE · LV4 · ACTIVE</span>
-        </div>
-        <div class="exp-entry-kw">
-          <span class="exp-kw">用户体验</span>
-          <span class="exp-kw">评价治理</span>
-          <span class="exp-kw">A/B 实验</span>
-          <span class="exp-kw">数据分析</span>
-          <span class="exp-kw">策略迭代</span>
-        </div>
-        <div class="exp-entry-body">
-          <p>负责美团平台用户生态体验方向的产品运营工作，核心聚焦于评价沟通机制的优化与商家行为治理。通过对评价链路的深度拆解，识别商家滥用私信骚扰用户的高频场景，设计并推动拦截策略上线，<strong>商家滥用行为拦截率显著提升</strong>，用户侧投诉量同步下降。</p>
-          <p>主导设计用户行为引导实验，针对误伤场景（正常用户被误判为恶意评价）进行精细化修复，通过 A/B 实验验证策略有效性，推动多个体验优化项目落地。深度参与数据分析与策略迭代，建立评价质量监控指标体系，持续跟踪核心指标变化并输出分析报告。</p>
-          <p>工作中与产品、算法、数据团队紧密协作，具备从问题发现、方案设计到数据验证的完整闭环能力。</p>
-        </div>
-      </div>
-
-      <!-- 小红书 -->
-      <div class="exp-entry reveal d2">
-        <div class="exp-entry-num">02</div>
-        <div class="entry-side-tag" aria-hidden="true">
-          <div class="est-label">XHS</div>
-          <div class="est-line"></div>
-        </div>
-        <div class="entry-status-badge">COMPLETED</div>
-        <div class="exp-entry-head">
-          <span class="exp-entry-company">小红书</span>
-          <span class="exp-entry-role">策略产品运营 · 用户体验</span>
-          <span class="exp-entry-period">2025.9 — 2025.12 · 北京</span>
-        </div>
-        <div class="exp-classify-bar">
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot"></div>
-          <div class="exp-classify-dot"></div>
-          <span class="exp-classify-label">CLEARANCE · LV3 · COMPLETED</span>
-        </div>
-        <div class="exp-entry-kw">
-          <span class="exp-kw">举报治理 ↑40%</span>
-          <span class="exp-kw">风险处置 ↑50%</span>
-          <span class="exp-kw">NLP · Prompt</span>
-          <span class="exp-kw">准召率 90%+</span>
-          <span class="exp-kw">风控策略</span>
-        </div>
-        <div class="exp-entry-body">
-          <p>负责小红书商业化广告场景下的用户举报治理与体验优化工作。通过对举报数据的系统性分析，重新梳理举报分类体系，优化审核流程与优先级机制，推动<strong>举报治理效率提升 40%，风险处置效率提升 50%</strong>。</p>
-          <p>独立挖掘「空包裹」消费纠纷模式——发现大量用户因收到空包裹而发起举报，但原有系统缺乏对应识别路径，导致处置延迟。通过数据验证该模式的规模与危害，推动风控策略上线，填补了该场景的治理空白。</p>
-          <p>主导引入 NLP 模型提升审核效率：精准设计 Prompt，基于商品信息与用户举报描述实现诉求自动化分类，<strong>模型准召率超过 90%</strong>，自动化处理率提升约 30%，大幅降低人工审核成本。同时与算法团队共建假货词库与权重机制，增设「高危投诉」标签，提升敏感场景识别灵敏度。搭建「事前规则—事中识别—事后复盘」闭环，将质量/售后类举报分流至客服通道，高危场景保留审核并打标优先级。</p>
-        </div>
-        <div class="exp-entry-results">
-          <div class="exp-result-item">
-            <span class="exp-result-num" data-count="40" data-prefix="↑" data-suffix="%">↑40%</span>
-            <span class="exp-result-label">举报治理效率</span>
-          </div>
-          <div class="exp-result-item">
-            <span class="exp-result-num" data-count="50" data-prefix="↑" data-suffix="%">↑50%</span>
-            <span class="exp-result-label">风险处置效率</span>
-          </div>
-          <div class="exp-result-item">
-            <span class="exp-result-num" data-count="90" data-suffix="%+">90%+</span>
-            <span class="exp-result-label">NLP 准召率</span>
-          </div>
-          <div class="exp-result-item">
-            <span class="exp-result-num" data-count="30" data-prefix="↑" data-suffix="%">↑30%</span>
-            <span class="exp-result-label">自动化处理率</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 教育背景 -->
-      <div class="exp-entry reveal d3" style="border-bottom:none;margin-bottom:0;padding-bottom:1.2rem">
-        <div class="exp-entry-num">EDU</div>
-        <div class="entry-side-tag" aria-hidden="true">
-          <div class="est-label">USST</div>
-          <div class="est-line"></div>
-        </div>
-        <div class="entry-status-badge">2022—2026</div>
-        <div class="exp-entry-head">
-          <span class="exp-entry-company">上海理工大学</span>
-          <span class="exp-entry-role">数学与应用数学 · 本科</span>
-          <span class="exp-entry-period">2022 — 2026 · 上海</span>
-        </div>
-        <div class="exp-classify-bar">
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot"></div>
-          <div class="exp-classify-dot"></div>
-          <div class="exp-classify-dot"></div>
-          <span class="exp-classify-label">CLEARANCE · LV2 · EDUCATION</span>
-        </div>
-        <div class="exp-entry-kw">
-          <span class="exp-kw">大创项目负责人</span>
-          <span class="exp-kw">数学建模</span>
-          <span class="exp-kw">SQL · Python</span>
-          <span class="exp-kw">Figma</span>
-          <span class="exp-kw">uni-app</span>
-        </div>
-        <div class="exp-entry-body">
-          <p>主修数学与应用数学，具备扎实的数理基础与数据分析能力。担任大学生创新创业训练计划（大创）项目总负责人，主导 AR 校园导航应用的立项、研究与开发全流程。参与数学建模竞赛，培养了结构化问题拆解与定量分析能力。</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
 <!-- §4 项目经历 -->
 <section id="projects" class="section" style="position:relative">
   <!-- 右上角档案编号水印 -->
   <div class="section-file-mark" aria-hidden="true">
-    <span>SECTION · 03</span>
+    <span>SECTION · 02</span>
     <span>PROJECTS · SELECTED</span>
     <span>FILES · 03</span>
   </div>
 
   <div class="section-inner">
-    <div class="sec-eyebrow reveal">03 · Projects</div>
+    <div class="sec-eyebrow reveal">02 · Projects</div>
     <div class="sec-title reveal d1">项目经历</div>
     <div class="sec-sub reveal d2">Selected Work · 2024—2026</div>
 
     <div class="proj-doc">
 
-      <!-- 项目 01：小红书 AI -->
+      <!-- 项目 01：Doll-Lover App -->
       <div class="proj-entry reveal d1">
         <div class="proj-entry-num">01</div>
-        <div class="entry-side-tag" aria-hidden="true">
-          <div class="est-label">AI · NLP</div>
-          <div class="est-line"></div>
-        </div>
-        <div class="entry-status-badge">SHIPPED</div>
-        <div class="proj-entry-head">
-          <span class="proj-entry-title">小红书 AI 工程提效审核</span>
-          <span class="proj-entry-meta">XIAOHONGSHU · 2025.9 — 2025.11</span>
-        </div>
-        <div class="exp-classify-bar">
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <span class="exp-classify-label">PRIORITY · S-RANK · SHIPPED</span>
-        </div>
-        <div class="proj-entry-kw">
-          <span class="proj-kw">NLP</span>
-          <span class="proj-kw">Prompt Engineering</span>
-          <span class="proj-kw">分流机制</span>
-          <span class="proj-kw">风控策略</span>
-          <span class="proj-kw">主导</span>
-        </div>
-        <div class="proj-entry-body">
-          <p><strong>背景与问题</strong>：小红书商业化广告举报场景中，「质量/售后」类举报体量庞大，占用大量人工审核资源；而「假货」等高危场景因用户描述模糊、词汇多样，常被系统误判为低优先级，导致高风险响应严重延迟，平台信任度受损。</p>
-          <p><strong>AI 能力引入</strong>：主导引入 NLP 模型，精准设计 Prompt，将商品信息与用户举报描述作为联合输入，实现举报诉求的自动化分类。模型在测试集上<span class="proj-stat">准召率超 90%</span>，显著优于规则系统。自动化处理率提升约<span class="proj-stat">30%</span>，大幅降低人工审核成本。</p>
-          <p><strong>识别逻辑迭代</strong>：与算法团队共建假货词库与权重机制，增设「高危投诉」标签，提升敏感场景识别灵敏度，使高危举报的识别率提升约<span class="proj-stat">20%</span>。</p>
-          <p><strong>分流机制设计</strong>：搭建「事前规则—事中识别—事后复盘」完整闭环。质量/售后类举报自动分流至客服通道，高危场景保留人工审核并打标优先级，实现差异化处置。复盘机制定期输出误判分析，持续驱动模型与规则迭代。</p>
-        </div>
-        <div class="proj-entry-results">
-          <div class="proj-result-item">
-            <span class="proj-result-num" data-count="90" data-suffix="%+">90%+</span>
-            <span class="proj-result-label">NLP 准召率</span>
-          </div>
-          <div class="proj-result-item">
-            <span class="proj-result-num" data-count="30" data-prefix="↑" data-suffix="%">↑30%</span>
-            <span class="proj-result-label">自动化处理率</span>
-          </div>
-          <div class="proj-result-item">
-            <span class="proj-result-num" data-count="20" data-prefix="↓" data-suffix="%">↓20%</span>
-            <span class="proj-result-label">风险指标</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 项目 02：AR 校园导航 -->
-      <div class="proj-entry reveal d2">
-        <div class="proj-entry-num">02</div>
-        <div class="entry-side-tag" aria-hidden="true">
-          <div class="est-label">AR · APP</div>
-          <div class="est-line"></div>
-        </div>
-        <div class="entry-status-badge">COMPLETED</div>
-        <div class="proj-entry-head">
-          <span class="proj-entry-title">AR 校园导航应用</span>
-          <span class="proj-entry-meta">大创项目 · 总负责人 · 2024.5 — 2025.5</span>
-        </div>
-        <div class="exp-classify-bar">
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot lit"></div>
-          <div class="exp-classify-dot"></div>
-          <span class="exp-classify-label">PRIORITY · A-RANK · COMPLETED</span>
-        </div>
-        <div class="proj-entry-kw">
-          <span class="proj-kw">Unity · AR</span>
-          <span class="proj-kw">用户研究</span>
-          <span class="proj-kw">100+ 问卷</span>
-          <span class="proj-kw">商业化测算</span>
-          <span class="proj-kw">总负责人</span>
-        </div>
-        <div class="proj-entry-body">
-            <p><strong>项目背景</strong>：面向上海理工大学学生群体，基于 Unity 设计并实现 AR 校园导航应用，旨在优化校园动线体验与信息获取效率。作为大学生创新创业训练计划（大创）项目，担任总负责人，统筹立项、研究、设计与开发全流程。</p>
-            <p><strong>用户研究</strong>：设计并发放 100+ 份问卷，结合校园内实地行为观察，搭建需求分析框架。通过聚类分析识别核心用户诉求为「地点标签 + 实时导航」，排除了「社交打卡」等次要需求，确保产品聚焦。</p>
-            <p><strong>产品设计</strong>：基于用户研究结论定义核心功能集与迭代优先级，主导 AR 交互方案设计，包括 AR 标注层的信息密度控制、导航路径可视化方案及多场景切换逻辑。</p>
-            <p><strong>商业化测算</strong>：系统评估多条变现路径，包括食堂 AR 菜单广告位、AR 校园纪念 VIP 礼包、校园商户 POI 推广等，完成各路径的收入规模估算与可行性分析，形成商业化方案报告。</p>
-          </div>
-          <!-- B站视频嵌入 -->
-          <div class="proj-video-wrap">
-            <div class="proj-video-label">演示视频 · Demo</div>
-            <div class="proj-video-ratio">
-              <iframe
-                src="https://player.bilibili.com/player.html?bvid=BV13AXJBqEVC&autoplay=0&danmaku=0&high_quality=1"
-                allowfullscreen
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
-                loading="lazy"
-              ></iframe>
-            </div>
-          </div>
-          <div class="proj-entry-results">
-            <div class="proj-result-item">
-              <span class="proj-result-num" data-count="100" data-suffix="+">100+</span>
-              <span class="proj-result-label">用户问卷</span>
-            </div>
-            <div class="proj-result-item">
-              <span class="proj-result-num">全流程</span>
-              <span class="proj-result-label">总负责人</span>
-            </div>
-            <div class="proj-result-item">
-              <span class="proj-result-num" data-count="3" data-suffix="条">3条</span>
-              <span class="proj-result-label">商业化路径</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 项目 03：Doll-Lover App -->
-      <div class="proj-entry reveal d3" style="border-bottom:none;margin-bottom:0;padding-bottom:1.2rem">
-        <div class="proj-entry-num">03</div>
         <div class="entry-side-tag" aria-hidden="true">
           <div class="est-label">UNI-APP</div>
           <div class="est-line"></div>
         </div>
         <div class="entry-status-badge active">IN DEV</div>
-
-        <!-- 标题行 -->
         <div class="proj-entry-head">
           <span class="proj-entry-title">Doll-Lover 衣橱管理 App</span>
           <span class="proj-entry-meta">独立全栈开发 · 2026 — 开发中</span>
         </div>
-        <!-- 机密等级条 -->
         <div class="exp-classify-bar">
           <div class="exp-classify-dot lit"></div>
           <div class="exp-classify-dot lit"></div>
@@ -2826,13 +2559,15 @@ footer {
           <div class="exp-classify-dot"></div>
           <span class="exp-classify-label">PRIORITY · B-RANK · IN DEV</span>
         </div>
-        <!-- 关键词 -->
         <div class="proj-entry-kw">
           <span class="proj-kw">uni-app</span>
           <span class="proj-kw">uniCloud</span>
           <span class="proj-kw">全栈独立</span>
           <span class="proj-kw">BJD 娃圈</span>
           <span class="proj-kw">跨平台</span>
+        </div>
+        <div class="proj-entry-body">
+          <p><strong>背景</strong>：BJD 娃娃玩家通常拥有多个娃娃和大量娃物娃服，手动管理衣橱搭配与开销费时费力。开发 Doll-Lover App，解决跨娃搭配记录、资金管理和物品查找等高频痛点，为娃圈玩家提供一站式管理工具。</p>
         </div>
 
         <!-- ── 产品展示区 ── -->
@@ -2904,6 +2639,265 @@ footer {
            target="_blank" rel="noopener">
           ↓ APK 下载体验
         </a>
+      </div>
+
+      <!-- 项目 02：AR 校园导航 -->
+      <div class="proj-entry reveal d2" style="border-bottom:none;margin-bottom:0;padding-bottom:1.2rem">
+        <div class="proj-entry-num">02</div>
+        <div class="entry-side-tag" aria-hidden="true">
+          <div class="est-label">AR · APP</div>
+          <div class="est-line"></div>
+        </div>
+        <div class="entry-status-badge">COMPLETED</div>
+        <div class="proj-entry-head">
+          <span class="proj-entry-title">AR 校园导航应用</span>
+          <span class="proj-entry-meta">大创项目 · 总负责人 · 2024.5 — 2025.5</span>
+        </div>
+        <div class="exp-classify-bar">
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot"></div>
+          <span class="exp-classify-label">PRIORITY · A-RANK · COMPLETED</span>
+        </div>
+        <div class="proj-entry-kw">
+          <span class="proj-kw">Unity · AR</span>
+          <span class="proj-kw">用户研究</span>
+          <span class="proj-kw">100+ 问卷</span>
+          <span class="proj-kw">商业化测算</span>
+          <span class="proj-kw">总负责人</span>
+        </div>
+        <div class="proj-entry-body">
+            <p><strong>项目背景</strong>：面向上海理工大学学生群体，基于 Unity 设计并实现 AR 校园导航应用，旨在优化校园动线体验与信息获取效率。作为大学生创新创业训练计划（大创）项目，担任总负责人，统筹立项、研究、设计与开发全流程。</p>
+            <p><strong>用户研究</strong>：设计并发放 100+ 份问卷，结合校园内实地行为观察，搭建需求分析框架。通过聚类分析识别核心用户诉求为「地点标签 + 实时导航」，排除了「社交打卡」等次要需求，确保产品聚焦。</p>
+            <p><strong>产品设计</strong>：基于用户研究结论定义核心功能集与迭代优先级，主导 AR 交互方案设计，包括 AR 标注层的信息密度控制、导航路径可视化方案及多场景切换逻辑。</p>
+            <p><strong>商业化测算</strong>：系统评估多条变现路径，包括食堂 AR 菜单广告位、AR 校园纪念 VIP 礼包、校园商户 POI 推广等，完成各路径的收入规模估算与可行性分析，形成商业化方案报告。</p>
+          </div>
+          <!-- B站视频嵌入 -->
+          <div class="proj-video-wrap">
+            <div class="proj-video-label">演示视频 · Demo</div>
+            <div class="proj-video-ratio">
+              <iframe
+                src="https://player.bilibili.com/player.html?bvid=BV13AXJBqEVC&autoplay=0&danmaku=0&high_quality=1"
+                allowfullscreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+                loading="lazy"
+              ></iframe>
+            </div>
+          </div>
+          <div class="proj-entry-results">
+            <div class="proj-result-item">
+              <span class="proj-result-num" data-count="100" data-suffix="+">100+</span>
+              <span class="proj-result-label">用户问卷</span>
+            </div>
+            <div class="proj-result-item">
+              <span class="proj-result-num">全流程</span>
+              <span class="proj-result-label">总负责人</span>
+            </div>
+            <div class="proj-result-item">
+              <span class="proj-result-num" data-count="3" data-suffix="条">3条</span>
+              <span class="proj-result-label">商业化路径</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 项目 03：小红书 AI 工程提效审核 -->
+      <div class="proj-entry reveal d3" style="border-bottom:none;margin-bottom:0;padding-bottom:1.2rem">
+        <div class="proj-entry-num">03</div>
+        <div class="entry-side-tag" aria-hidden="true">
+          <div class="est-label">AI · NLP</div>
+          <div class="est-line"></div>
+        </div>
+        <div class="entry-status-badge">SHIPPED</div>
+        <div class="proj-entry-head">
+          <span class="proj-entry-title">小红书 AI 工程提效审核</span>
+          <span class="proj-entry-meta">XIAOHONGSHU · 2025.9 — 2025.11</span>
+        </div>
+        <div class="exp-classify-bar">
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <span class="exp-classify-label">PRIORITY · S-RANK · SHIPPED</span>
+        </div>
+        <div class="proj-entry-kw">
+          <span class="proj-kw">NLP</span>
+          <span class="proj-kw">Prompt Engineering</span>
+          <span class="proj-kw">分流机制</span>
+          <span class="proj-kw">风控策略</span>
+          <span class="proj-kw">主导</span>
+        </div>
+        <div class="proj-entry-body">
+          <p><strong>背景与问题</strong>：小红书商业化广告举报场景中，「质量/售后」类举报体量庞大，占用大量人工审核资源；而「假货」等高危场景因用户描述模糊、词汇多样，常被系统误判为低优先级，导致高风险响应严重延迟，平台信任度受损。</p>
+          <p><strong>AI 能力引入</strong>：主导引入 NLP 模型，精准设计 Prompt，将商品信息与用户举报描述作为联合输入，实现举报诉求的自动化分类。模型在测试集上准召率超 90%，显著优于规则系统。自动化处理率提升约 30%，大幅降低人工审核成本。</p>
+          <p><strong>识别逻辑迭代</strong>：与算法团队共建假货词库与权重机制，增设「高危投诉」标签，提升敏感场景识别灵敏度，使高危举报的识别率提升约 20%。</p>
+          <p><strong>分流机制设计</strong>：搭建「事前规则—事中识别—事后复盘」完整闭环。质量/售后类举报自动分流至客服通道，高危场景保留人工审核并打标优先级，实现差异化处置。复盘机制定期输出误判分析，持续驱动模型与规则迭代。</p>
+        </div>
+        <div class="proj-entry-results">
+          <div class="proj-result-item">
+            <span class="proj-result-num" data-count="90" data-suffix="%+">90%+</span>
+            <span class="proj-result-label">NLP 准召率</span>
+          </div>
+          <div class="proj-result-item">
+            <span class="proj-result-num" data-count="30" data-prefix="↑" data-suffix="%">↑30%</span>
+            <span class="proj-result-label">自动化处理率</span>
+          </div>
+          <div class="proj-result-item">
+            <span class="proj-result-num" data-count="20" data-prefix="↓" data-suffix="%">↓20%</span>
+            <span class="proj-result-label">风险指标</span>
+          </div>
+        </div>
+      </div>
+  </div>
+</section>
+
+<!-- §3 实习经历 -->
+<section id="internship" class="section" style="position:relative">
+  <!-- 右上角档案编号水印 -->
+  <div class="section-file-mark" aria-hidden="true">
+    <span>SECTION · 03</span>
+    <span>WORK · INTERNSHIP</span>
+    <span>ENTRIES · 03</span>
+  </div>
+
+  <div class="section-inner">
+    <div class="sec-eyebrow reveal">03 · Work</div>
+    <div class="sec-title reveal d1">实习经历</div>
+    <div class="sec-sub reveal d2">Internship Experience · 教育背景</div>
+
+    <div class="exp-doc">
+
+      <!-- 美团 -->
+      <div class="exp-entry reveal d1">
+        <div class="exp-entry-num">01</div>
+        <div class="entry-side-tag" aria-hidden="true">
+          <div class="est-label">MEITUAN</div>
+          <div class="est-line"></div>
+        </div>
+        <div class="entry-status-badge active">CURRENT</div>
+        <div class="exp-entry-head">
+          <span class="exp-entry-company">美团</span>
+          <span class="exp-entry-role">产品经理 · 生态体验</span>
+          <span class="exp-entry-period">2025.12 — 至今 · 上海</span>
+        </div>
+        <div class="exp-classify-bar">
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot"></div>
+          <span class="exp-classify-label">CLEARANCE · LV4 · ACTIVE</span>
+        </div>
+        <div class="exp-entry-kw">
+          <span class="exp-kw">策略优化</span>
+          <span class="exp-kw">用户反馈漏斗</span>
+          <span class="exp-kw">商家自助率提升</span>
+        </div>
+        <div class="exp-entry-body">
+          <p><strong>沟通功能优化</strong>：调整商家策略，推动成功发起沟通量减少 1/3；为沉默用户设计轻量级反馈入口。</p>
+          <p><strong>评价处置触达设计</strong>：搭建全链路埋点漏斗，转化率由 10%→50%；分析 300+ 条音频，主动修复处置误判。</p>
+          <p><strong>报备功能优化</strong>：通过 SQL 取数与音频分析诊断痛点，优化报备流程，大幅提升商家自助解决率。</p>
+        </div>
+      </div>
+
+      <!-- 小红书 -->
+      <div class="exp-entry reveal d2">
+        <div class="exp-entry-num">02</div>
+        <div class="entry-side-tag" aria-hidden="true">
+          <div class="est-label">XHS</div>
+          <div class="est-line"></div>
+        </div>
+        <div class="entry-status-badge">COMPLETED</div>
+        <div class="exp-entry-head">
+          <span class="exp-entry-company">小红书</span>
+          <span class="exp-entry-role">产品经理 · 风控&amp;内容安全</span>
+          <span class="exp-entry-period">2025.9 — 2025.12 · 北京</span>
+        </div>
+        <div class="exp-classify-bar">
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot"></div>
+          <div class="exp-classify-dot"></div>
+          <span class="exp-classify-label">CLEARANCE · LV3 · COMPLETED</span>
+        </div>
+        <div class="exp-entry-kw">
+          <span class="exp-kw">黑产治理</span>
+          <span class="exp-kw">策略上线</span>
+          <span class="exp-kw">预售时长监控</span>
+        </div>
+        <div class="exp-entry-body">
+          <p><strong>直播举报治理</strong>：设计上线「价格区间必填」规则，次周直播间举报量下降 30%，审核时长缩短 40%。</p>
+          <p><strong>新型导流与欺诈治理</strong>：聚类分析 100+ 条音频输出风险报告；针对空包欺诈，推动「预售时长监控」上线，投诉量下降 75%。</p>
+        </div>
+      </div>
+
+      <!-- 爱回收 -->
+      <div class="exp-entry reveal d3">
+        <div class="exp-entry-num">03</div>
+        <div class="entry-side-tag" aria-hidden="true">
+          <div class="est-label">AIHUISHOU</div>
+          <div class="est-line"></div>
+        </div>
+        <div class="entry-status-badge">COMPLETED</div>
+        <div class="exp-entry-head">
+          <span class="exp-entry-company">爱回收</span>
+          <span class="exp-entry-role">产品经理 · 数据产品&amp;商业增长</span>
+          <span class="exp-entry-period">2025.5 — 2025.9 · 上海</span>
+        </div>
+        <div class="exp-classify-bar">
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot"></div>
+          <div class="exp-classify-dot"></div>
+          <span class="exp-classify-label">CLEARANCE · LV3 · COMPLETED</span>
+        </div>
+        <div class="exp-entry-kw">
+          <span class="exp-kw">活动裂变</span>
+          <span class="exp-kw">用户价值模型</span>
+          <span class="exp-kw">数据看板</span>
+        </div>
+        <div class="exp-entry-body">
+          <p><strong>产品设计与裂变</strong>：主导「爱分类 3.0」活动策划，负责限时加价与裂变拉新，用户复投转化率提升 20%。</p>
+          <p><strong>产品优化与模型预测</strong>：优化用户价值模型，新增入库单价特征，解决 20% 品类价值预测偏差问题，建立数据看板。</p>
+        </div>
+      </div>
+
+      <!-- 教育背景 -->
+      <div class="exp-entry reveal d4" style="border-bottom:none;margin-bottom:0;padding-bottom:1.2rem">
+        <div class="exp-entry-num">EDU</div>
+        <div class="entry-side-tag" aria-hidden="true">
+          <div class="est-label">USST</div>
+          <div class="est-line"></div>
+        </div>
+        <div class="entry-status-badge">2022—2026</div>
+        <div class="exp-entry-head">
+          <span class="exp-entry-company">上海理工大学</span>
+          <span class="exp-entry-role">数学与应用数学 · 本科</span>
+          <span class="exp-entry-period">2022 — 2026 · 上海</span>
+        </div>
+        <div class="exp-classify-bar">
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot lit"></div>
+          <div class="exp-classify-dot"></div>
+          <div class="exp-classify-dot"></div>
+          <div class="exp-classify-dot"></div>
+          <span class="exp-classify-label">CLEARANCE · LV2 · EDUCATION</span>
+        </div>
+        <div class="exp-entry-kw">
+          <span class="exp-kw">大创项目负责人</span>
+          <span class="exp-kw">数学建模</span>
+          <span class="exp-kw">SQL · Python</span>
+          <span class="exp-kw">Figma</span>
+          <span class="exp-kw">uni-app</span>
+        </div>
+        <div class="exp-entry-body">
+          <p>主修数学与应用数学，具备扎实的数理基础与数据分析能力。担任大学生创新创业训练计划（大创）项目总负责人，主导 AR 校园导航应用的立项、研究与开发全流程。参与数学建模竞赛，培养了结构化问题拆解与定量分析能力。</p>
+        </div>
       </div>
 
     </div>
@@ -2994,15 +2988,6 @@ footer {
           </li>
           <li class="contact-item">
             <div class="contact-icon">
-              <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-            </div>
-            <div class="contact-info">
-              <span class="contact-label">小红书</span>
-              <span class="contact-val">@草莓等等</span>
-            </div>
-          </li>
-          <li class="contact-item">
-            <div class="contact-icon">
               <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             </div>
             <div class="contact-info">
@@ -3018,7 +3003,7 @@ footer {
 </section>
 
 <footer>
-  <span class="footer-brand">辛擎 · Gyeong · 2025</span>
+  <span class="footer-brand">辛擎 · 2025</span>
   <span class="footer-copy">© <span id="fy"></span> · Portfolio</span>
 </footer>
 
